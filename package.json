@@ -1,0 +1,74 @@
+{
+    "name": "@signalsafe/simulator-core",
+    "version": "0.1.3",
+    "type": "module",
+    "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes — no UI or transport.",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SignalSafeSoftware/simulator-core.git"
+    },
+    "bugs": {
+        "url": "https://github.com/SignalSafeSoftware/simulator-core/issues"
+    },
+    "homepage": "https://github.com/SignalSafeSoftware/simulator-core#readme",
+    "keywords": [
+        "tree-spec",
+        "simulator",
+        "decision-tree",
+        "scenario",
+        "training",
+        "phishing",
+        "security-awareness",
+        "typescript",
+        "runtime",
+        "session",
+        "headless",
+        "signalsafe"
+    ],
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "engines": {
+        "node": ">=18"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "typecheck": "tsc --noEmit",
+        "pack:local": "npm pack --pack-destination ../../dist/reusable-npm",
+        "release:check": "node ../../scripts/run-private-package-release-checks.mjs --mode prepublish",
+        "release:verify": "node ../../scripts/run-private-package-release-checks.mjs --mode postpublish",
+        "publish:preflight": "node ../../scripts/check-private-registry-preflight.mjs --scope @signalsafe",
+        "publish:dry-run": "npm publish --dry-run",
+        "publish:verify": "node ../../scripts/check-private-package-postpublish.mjs --scope @signalsafe --package @signalsafe/simulator-core --version $npm_package_version",
+        "pack:check": "node ../../scripts/check-package-tarball.mjs --tgz \"../../dist/reusable-npm/signalsafe-simulator-core-$npm_package_version.tgz\" --expect package/dist/index.js --expect package/package.json --expect package/README.md",
+        "smoke:external": "node ../../scripts/smoke-simulator-core-external-consumer.mjs",
+        "smoke:published": "node ../../scripts/smoke-simulator-core-external-consumer.mjs --source registry",
+        "prepublishOnly": "npm run build",
+        "prepare": "npm run build",
+        "test": "vitest run",
+        "test:monorepo": "cd ../../frontend && yarn vitest run --config vitest.simulator-core.config.ts"
+    },
+    "dependencies": {
+        "@signalsafe/tree-spec": "^0.3.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.4.2",
+        "vitest": "^3.2.4"
+    }
+}
