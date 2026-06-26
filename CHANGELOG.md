@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-06-26
+
 ### Added
 
 - `SECURITY.md` and Dependabot configuration.
@@ -25,10 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Release process in [RELEASING.md](./RELEASING.md).
-
-## [0.1.4]
-
-Prior published release on npm (`@signalsafe/simulator-core`). Detailed historical notes were not recorded in this repository.
 
 [Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.4...HEAD
 [0.1.4]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.4
