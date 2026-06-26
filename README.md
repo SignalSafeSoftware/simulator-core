@@ -308,6 +308,8 @@ Examples are documentation-focused TypeScript files. They illustrate package usa
 
 ## Development
 
+`npm run build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. Ecosystem sibling `paths` in `tsconfig.json` apply to local typecheck/tests only.
+
 ```bash
 npm install
 npm run build
