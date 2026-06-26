@@ -1,0 +1,46 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.5] - 2026-06-26
+
+### Fixed
+
+- Clear monorepo `paths` from standalone `tsconfig.build.json` so local `yarn build` works outside the monorepo.
+
+### Changed
+
+- Standardize development on Yarn 1.22.22 (`packageManager`, README dev commands).
+- Bump `@signalsafe/tree-spec` dependency to `^0.3.2`.
+
+## [0.1.4] - 2026-06-26
+
+### Added
+
+- `SECURITY.md` and Dependabot configuration.
+- `CHANGELOG.md` and updated release documentation.
+- Expanded unit test coverage.
+- Package artifact smoke test (`yarn smoke:package`).
+
+### Changed
+
+- Package metadata: `packageManager` (Batch 3).
+- README: lifecycle, boundaries, security (Batch 4).
+
+### CI
+
+- Checks and tests on every PR; Sonar **`scan`** is label-gated on PRs and runs on tag push and manual dispatch (Batch 1).
+- Publish only from manual **`main`** dispatch or **`v*`** tags (not PR labels); publish requires **`checks`**, **`tests`**, and **`scan`**.
+
+### Documentation
+
+- Release process in [RELEASING.md](./RELEASING.md).
+
+[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.5
+[0.1.4]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.4
