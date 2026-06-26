@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-06-26
+
+### Fixed
+
+- Clear monorepo `paths` from standalone `tsconfig.build.json` so local `yarn build` works outside the monorepo.
+
+### Changed
+
+- Standardize development on Yarn 1.22.22 (`packageManager`, README dev commands).
+- Bump `@signalsafe/tree-spec` dependency to `^0.3.2`.
+
 ## [0.1.4] - 2026-06-26
 
 ### Added
@@ -28,5 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Release process in [RELEASING.md](./RELEASING.md).
 
-[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.5
 [0.1.4]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.4
