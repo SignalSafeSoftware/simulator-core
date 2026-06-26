@@ -318,3 +318,8 @@ npm run typecheck
 ## Security
 
 See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted content** unless the host validates them first. This library does not sandbox execution beyond stepping the scenario graph.
+
+## Changelog and releases
+
+- [CHANGELOG.md](./CHANGELOG.md)
+- [RELEASING.md](./RELEASING.md)
