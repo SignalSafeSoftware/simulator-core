@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `SECURITY.md` and Dependabot configuration.
 - `CHANGELOG.md` and updated release documentation.
+- Expanded unit test coverage.
+- Package artifact smoke test (`yarn smoke:package`).
 
 ### Changed
 
