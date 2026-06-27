@@ -2,6 +2,10 @@
 
 Standalone repository: [SignalSafeSoftware/simulator-core](https://github.com/SignalSafeSoftware/simulator-core).
 
+## Requirements
+
+- Node.js **>=20.19.0** for local development, CI, and publish smoke (see `package.json` `engines`).
+
 **Depends on:** `@signalsafe/tree-spec` — align dependency versions before release.
 
 ## CI publish policy
