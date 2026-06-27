@@ -285,6 +285,12 @@ console.log(rawChoices.map((choice) => choice.label));
 - `mergeScoreDelta()`
 - `TreeSpecRuntimeError`
 
+## Error messages and audiences
+
+Thrown errors and `treeSpecRuntimeIssues()` messages are **developer/author diagnostics** (missing nodes, invalid wire shape, etc.). They are precise so editors and tests can act on them.
+
+**Do not** surface raw `TreeSpecRuntimeError.message` text to learners. Host apps and `@signalsafe/simulator-react` map runtime/render failures to generic learner copy; see [simulator-react/docs/ERROR_BOUNDARIES.md](https://github.com/SignalSafeSoftware/simulator-react/blob/main/docs/ERROR_BOUNDARIES.md).
+
 ## Result Shapes
 
 `dispatchTreeSpecChoice()` returns one of two result shapes:
