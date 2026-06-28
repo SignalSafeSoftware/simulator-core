@@ -1,6 +1,6 @@
 {
     "name": "@signalsafe/simulator-core",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "type": "module",
     "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes — no UI or transport.",
     "license": "MIT",
@@ -69,7 +69,7 @@
         "test:monorepo": "cd ../../frontend && yarn vitest run --config vitest.simulator-core.config.ts"
     },
     "dependencies": {
-        "@signalsafe/tree-spec": "^0.3.2"
+        "@signalsafe/tree-spec": "^0.3.3"
     },
     "devDependencies": {
         "typescript": "^5.4.2",
