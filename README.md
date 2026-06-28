@@ -1,9 +1,35 @@
 # `@signalsafe/simulator-core`
 
-`@signalsafe/simulator-core` is a headless runtime for stepping through a `TreeSpec` scenario.
-It takes a valid `TreeSpecWire`, creates immutable session state, applies choices, tracks score deltas, and returns either the next node or a terminal outcome.
+Headless **TreeSpec session runtime**: step scenarios, accumulate scores, resolve outcomes — no UI, React, routing, or transport.
 
-Use it when you need runtime behavior for a scenario player but do not want any UI, React, routing, or networking concerns bundled into the package.
+| | |
+|---|---|
+| **npm** | `@signalsafe/simulator-core` |
+| **GitHub** | [SignalSafeSoftware/simulator-core](https://github.com/SignalSafeSoftware/simulator-core) |
+| **Depends on** | `@signalsafe/tree-spec` |
+
+## What this package does
+
+- Parse and validate runtime-ready **`TreeSpecWire`** payloads.
+- Run an immutable **session state machine**: `createInitialTreeSpecSession` → `dispatchTreeSpecChoice`.
+- Resolve **node views**, **score deltas**, and **micro-feedback** for renderers.
+
+## What this package does not do
+
+- React components, device shells, or Bootstrap UI — use `@signalsafe/simulator-react`.
+- HTTP APIs, authentication, routing, or persistence — host app owns transport and storage.
+- Deep content security review — treat wire JSON as trusted authoring content unless the host validates it first.
+
+## State lifecycle
+
+1. **`parseTreeSpecRuntime(wire)`** / **`treeSpecRuntimeIssues(wire)`** — validate before play.
+2. **`createInitialTreeSpecSession(wire)`** — initial `currentNodeId`, empty history, zeroed scores.
+3. **`dispatchTreeSpecChoice(state, nodeId, choiceId)`** — returns `continue` (next node + delta) or `ended` (terminal outcome).
+4. Session **`history`** is append-only; **`cumulativeScore`** merges deltas via `mergeScoreDelta`.
+
+## Decision / transition flow
+
+For each choice, the runtime finds the matching transition (`findTransitionForChoice`), applies optional **score delta**, resolves **feedback** (transition overrides choice), and either lands on the next node or a terminal **outcome** when `to` is END.
 
 ## Install
 
@@ -259,6 +285,12 @@ console.log(rawChoices.map((choice) => choice.label));
 - `mergeScoreDelta()`
 - `TreeSpecRuntimeError`
 
+## Error messages and audiences
+
+Thrown errors and `treeSpecRuntimeIssues()` messages are **developer/author diagnostics** (missing nodes, invalid wire shape, etc.). They are precise so editors and tests can act on them.
+
+**Do not** surface raw `TreeSpecRuntimeError.message` text to learners. Host apps and `@signalsafe/simulator-react` map runtime/render failures to generic learner copy; see [simulator-react/docs/ERROR_BOUNDARIES.md](https://github.com/SignalSafeSoftware/simulator-react/blob/main/docs/ERROR_BOUNDARIES.md).
+
 ## Result Shapes
 
 `dispatchTreeSpecChoice()` returns one of two result shapes:
@@ -279,3 +311,25 @@ Session state tracks:
 - `examples/branching-feedback-session.ts`: multi-step flow with validation, intermediate feedback, render hints, and terminal feedback
 
 Examples are documentation-focused TypeScript files. They illustrate package usage, but they are not part of the published runtime bundle.
+
+## Development
+
+Requires Node.js **>=22.12.0** (`engines.node`). CI runs checks, tests, and smoke on Node **22** and **24**; publish uses Node **24**. Node 20 is no longer supported (GitHub Actions Node 20 deprecation).
+
+`yarn build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. Ecosystem sibling `paths` in `tsconfig.json` apply to local typecheck/tests only.
+
+```bash
+yarn install
+yarn build
+yarn test
+yarn typecheck
+```
+
+## Security
+
+See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted content** unless the host validates them first. This library does not sandbox execution beyond stepping the scenario graph.
+
+## Changelog and releases
+
+- [CHANGELOG.md](./CHANGELOG.md)
+- [RELEASING.md](./RELEASING.md)
