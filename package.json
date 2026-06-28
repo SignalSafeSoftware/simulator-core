@@ -1,6 +1,6 @@
 {
     "name": "@signalsafe/simulator-core",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "type": "module",
     "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes — no UI or transport.",
     "license": "MIT",
@@ -42,7 +42,7 @@
         "LICENSE"
     ],
     "engines": {
-        "node": ">=18"
+        "node": ">=22.12.0"
     },
     "packageManager": "yarn@1.22.22",
     "publishConfig": {
@@ -50,6 +50,7 @@
     },
     "scripts": {
         "build": "tsc -p tsconfig.build.json",
+        "lint": "yarn typecheck",
         "typecheck": "tsc --noEmit",
         "pack:local": "npm pack --pack-destination ../../dist/reusable-npm",
         "release:check": "node ../../scripts/run-private-package-release-checks.mjs --mode prepublish",
@@ -64,10 +65,11 @@
         "prepublishOnly": "npm run build",
         "prepare": "npm run build",
         "test": "vitest run",
+        "test:coverage": "yarn test --coverage",
         "test:monorepo": "cd ../../frontend && yarn vitest run --config vitest.simulator-core.config.ts"
     },
     "dependencies": {
-        "@signalsafe/tree-spec": "^0.3.2"
+        "@signalsafe/tree-spec": "^0.3.3"
     },
     "devDependencies": {
         "typescript": "^5.4.2",

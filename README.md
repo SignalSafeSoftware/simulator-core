@@ -285,6 +285,12 @@ console.log(rawChoices.map((choice) => choice.label));
 - `mergeScoreDelta()`
 - `TreeSpecRuntimeError`
 
+## Error messages and audiences
+
+Thrown errors and `treeSpecRuntimeIssues()` messages are **developer/author diagnostics** (missing nodes, invalid wire shape, etc.). They are precise so editors and tests can act on them.
+
+**Do not** surface raw `TreeSpecRuntimeError.message` text to learners. Host apps and `@signalsafe/simulator-react` map runtime/render failures to generic learner copy; see [simulator-react/docs/ERROR_BOUNDARIES.md](https://github.com/SignalSafeSoftware/simulator-react/blob/main/docs/ERROR_BOUNDARIES.md).
+
 ## Result Shapes
 
 `dispatchTreeSpecChoice()` returns one of two result shapes:
@@ -307,6 +313,8 @@ Session state tracks:
 Examples are documentation-focused TypeScript files. They illustrate package usage, but they are not part of the published runtime bundle.
 
 ## Development
+
+Requires Node.js **>=22.12.0** (`engines.node`). CI runs checks, tests, and smoke on Node **22** and **24**; publish uses Node **24**. Node 20 is no longer supported (GitHub Actions Node 20 deprecation).
 
 `yarn build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. Ecosystem sibling `paths` in `tsconfig.json` apply to local typecheck/tests only.
 
