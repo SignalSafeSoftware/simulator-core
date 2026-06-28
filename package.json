@@ -72,7 +72,7 @@
         "@signalsafe/tree-spec": "^0.3.3"
     },
     "devDependencies": {
-        "typescript": "^5.4.2",
+        "typescript": "^6.0.3",
         "@vitest/coverage-v8": "^3.2.4",
         "vitest": "^3.2.4"
     }
