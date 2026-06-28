@@ -7,13 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- Tests: expanded dispatch edge cases and package-boundary coverage.
+## [0.1.7] - 2026-06-28
 
 ### Changed
 
-- Raise minimum supported Node.js to **>=22.12.0** (`engines.node`); CI matrix tests **22** and **24** only (Node 20 dropped due to GitHub Actions Node 20 deprecation).
+- Raised the supported Node.js baseline to Node 22.12+.
+- Standardized package CI checks for lint and coverage.
+- Expanded simulator-core behavior tests for dispatch edge cases, END outcomes, stale node mismatches, invalid choices, score validation, lesson trigger passthrough, and runtime issue reporting.
+
+### Notes
+
+- No runtime API changes.
+- No React, DOM, Bootstrap, or UI framework dependencies were added.
 
 ## [0.1.5] - 2026-06-26
 
@@ -49,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Release process in [RELEASING.md](./RELEASING.md).
 
-[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...v0.1.7
 [0.1.5]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.5
 [0.1.4]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.4
