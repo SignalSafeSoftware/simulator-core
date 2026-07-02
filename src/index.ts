@@ -7,6 +7,43 @@
 export { TreeSpecRuntimeError } from "./errors.js";
 
 export type {
+    BrowserFormField,
+    SimulatorApp,
+    SimulatorContact,
+    SimulatorDevice,
+    SimulatorDevicePayload,
+    SimulatorDirectoryEntry,
+    SimulatorEmailApp,
+    SimulatorEmailMessageDetail,
+    SimulatorEmailMessageRow,
+    SimulatorEmailScreenId,
+    SimulatorEntryPoint,
+    SimulatorHomeApp,
+    SimulatorHomeScreenId,
+    SimulatorInternetApp,
+    SimulatorInternetForm,
+    SimulatorInternetPage,
+    SimulatorInternetScreenId,
+    SimulatorMainMenuItem,
+    SimulatorMessagesApp,
+    SimulatorMessagesScreenId,
+    SimulatorPageButton,
+    SimulatorPhoneApp,
+    SimulatorPhoneIncomingCall,
+    SimulatorPhoneScreenId,
+    SimulatorScreenId,
+    SimulatorSmsThreadDetail,
+    SimulatorSmsThreadSummary,
+    SmsMessageAttachment,
+    SmsThreadMessage,
+} from "./devicePayload.js";
+
+export {
+    hasDeviceEntryPoint,
+    isSimulatorDevicePayload,
+} from "./devicePayloadGuards.js";
+
+export type {
     DispatchContinue,
     DispatchEnded,
     DispatchResult,
