@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-08-28
+
+### Changed
+
+- Require `@signalsafe/tree-spec` **^0.3.4** and lock the runtime to the published `0.3.4` release.
+
 ## [0.1.9] - 2026-08-28
 
 ### Changed
@@ -64,7 +70,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Release process in [RELEASING.md](./RELEASING.md).
 
-[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.9...HEAD
+[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.10...HEAD
+[0.1.10]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.9...v0.1.10
 [0.1.9]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.8...v0.1.9
 [0.1.7]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...v0.1.7
 [0.1.5]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.5
