@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-08-28
+
+### Changed
+
+- Updated the TypeScript 7-compatible build configuration and current CI action dependencies.
+
+### Notes
+
+- No runtime API changes.
+
 ## [0.1.7] - 2026-06-28
 
 ### Changed
@@ -54,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Release process in [RELEASING.md](./RELEASING.md).
 
-[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.9...HEAD
+[0.1.9]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.8...v0.1.9
 [0.1.7]: https://github.com/SignalSafeSoftware/simulator-core/compare/v0.1.5...v0.1.7
 [0.1.5]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.5
 [0.1.4]: https://github.com/SignalSafeSoftware/simulator-core/releases/tag/v0.1.4
