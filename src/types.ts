@@ -35,6 +35,12 @@ export type TreeSpecSessionState = {
     history: Array<{ nodeId: string; choiceId: string }>;
 };
 
+/** Versioned, graph-only session snapshot. Derived state is intentionally omitted. */
+export type TreeSpecSessionSnapshot = {
+    readonly version: 1;
+    readonly history: readonly { nodeId: string; choiceId: string }[];
+};
+
 export type DispatchContinue = {
     status: "continue";
     state: TreeSpecSessionState;

@@ -26,6 +26,7 @@ Headless **TreeSpec session runtime**: step scenarios, accumulate scores, resolv
 2. **`createInitialTreeSpecSession(wire)`** — initial `currentNodeId`, empty history, zeroed scores.
 3. **`dispatchTreeSpecChoice(state, nodeId, choiceId)`** — returns `continue` (next node + delta) or `ended` (terminal outcome).
 4. Session **`history`** is append-only; **`cumulativeScore`** merges deltas via `mergeScoreDelta`.
+5. **`serializeTreeSpecSession`** stores only the versioned choice history; **`restoreTreeSpecSession`** validates the snapshot and replays it through the dispatcher.
 
 ## Decision / transition flow
 
@@ -263,12 +264,33 @@ console.log(rawChoices.map((choice) => choice.label));
 
 `getWireChoices()` returns the original choice array from the source node so you can inspect metadata that is not present on `NodeView`.
 
+### Session snapshots
+
+Snapshots are graph-only and versioned:
+
+```ts
+import {
+    restoreTreeSpecSession,
+    serializeTreeSpecSession,
+} from "@signalsafe/simulator-core";
+
+const snapshot = serializeTreeSpecSession(session);
+const restored = restoreTreeSpecSession(wire, snapshot);
+```
+
+The snapshot contains `{ version: 1, history }`. Derived node, score, and
+terminal state are intentionally not trusted; restoration derives them by
+replaying each recorded choice through `dispatchTreeSpecChoice`. Malformed
+snapshots and invalid replay histories raise `TreeSpecRuntimeError`.
+
 ## Core API
 
 ### Session Lifecycle
 
 - `createInitialTreeSpecSession(wire)`: validates the wire payload and creates initial immutable state
 - `dispatchTreeSpecChoice(state, nodeId, choiceId)`: applies one choice from the current node and returns either a continue result or an ended result
+- `serializeTreeSpecSession(state)`: creates a versioned, graph-only replay snapshot
+- `restoreTreeSpecSession(wire, snapshot)`: validates and replays a snapshot into a fresh session
 - `treeSpecRuntimeIssues(wire)`: returns structural/runtime issues without throwing
 
 ### Runtime Helpers

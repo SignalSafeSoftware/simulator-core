@@ -15,6 +15,7 @@ import type {
     DispatchContinue,
     DispatchEnded,
     DispatchResult,
+    TreeSpecSessionSnapshot,
     TreeSpecSessionState,
 } from "./types.js";
 
@@ -126,6 +127,54 @@ export function dispatchTreeSpecChoice(
         appliedDelta,
         feedback,
     );
+}
+
+/** Serialize only the choices needed to replay a graph session; derived state is not trusted. */
+export function serializeTreeSpecSession(
+    state: TreeSpecSessionState,
+): TreeSpecSessionSnapshot {
+    return {
+        version: 1,
+        history: state.history.map((entry) => ({ ...entry })),
+    };
+}
+
+function parseSessionSnapshot(raw: unknown): TreeSpecSessionSnapshot {
+    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+        throw new TreeSpecRuntimeError("TreeSpec session snapshot must be an object.");
+    }
+    const record = raw as Record<string, unknown>;
+    if (record.version !== 1) {
+        throw new TreeSpecRuntimeError("Unsupported TreeSpec session snapshot version.");
+    }
+    if (!Array.isArray(record.history)) {
+        throw new TreeSpecRuntimeError("TreeSpec session snapshot history must be an array.");
+    }
+    const history: Array<{ nodeId: string; choiceId: string }> = [];
+    for (const entry of record.history) {
+        if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+            throw new TreeSpecRuntimeError("TreeSpec session history entries must be objects.");
+        }
+        const item = entry as Record<string, unknown>;
+        if (typeof item.nodeId !== "string" || item.nodeId.trim() === "" || typeof item.choiceId !== "string" || item.choiceId.trim() === "") {
+            throw new TreeSpecRuntimeError("TreeSpec session history entries require nodeId and choiceId.");
+        }
+        history.push({ nodeId: item.nodeId, choiceId: item.choiceId });
+    }
+    return { version: 1, history };
+}
+
+/** Restore a session by replaying every recorded choice through the graph dispatcher. */
+export function restoreTreeSpecSession(
+    wire: TreeSpecWire,
+    rawSnapshot: unknown,
+): TreeSpecSessionState {
+    const snapshot = parseSessionSnapshot(rawSnapshot);
+    let state = createInitialTreeSpecSession(wire);
+    for (const entry of snapshot.history) {
+        state = dispatchTreeSpecChoice(state, entry.nodeId, entry.choiceId).state;
+    }
+    return state;
 }
 
 /** Structural/runtime issues for editor UI (merge with lintTreeSpecWire). */

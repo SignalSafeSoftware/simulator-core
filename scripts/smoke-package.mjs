@@ -4,7 +4,7 @@ runSmokePackage({
     runtimeChecks: [
         {
             subpath: '.',
-            exports: ['createInitialTreeSpecSession', 'TreeSpecRuntimeError', 'parseTreeSpecRuntime'],
+        exports: ['createInitialTreeSpecSession', 'TreeSpecRuntimeError', 'parseTreeSpecRuntime', 'serializeTreeSpecSession', 'restoreTreeSpecSession'],
         },
     ],
     typecheckSubpaths: ['.'],

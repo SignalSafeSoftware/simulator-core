@@ -5,6 +5,8 @@ import {
     dispatchTreeSpecChoice,
     emptyScoreDelta,
     mergeScoreDelta,
+    restoreTreeSpecSession,
+    serializeTreeSpecSession,
     resolveFeedbackForTransition,
 } from "../src/index";
 
@@ -120,6 +122,26 @@ describe("session lifecycle", () => {
                 title: "Transition wins",
             }),
         ).toEqual({ key: "transition", title: "Transition wins" });
+    });
+
+    it("serializes only history and restores derived state by replay", () => {
+        let session = createInitialTreeSpecSession(multiStepWire());
+        const first = dispatchTreeSpecChoice(session, "a", "go");
+        if (first.status !== "continue") return;
+        session = first.state;
+
+        const snapshot = serializeTreeSpecSession(session);
+        expect(snapshot).toEqual({ version: 1, history: [{ nodeId: "a", choiceId: "go" }] });
+        const restored = restoreTreeSpecSession(multiStepWire(), snapshot);
+
+        expect(restored.currentNodeId).toBe("b");
+        expect(restored.cumulativeScore.total).toBe(2);
+        expect(restored.history).toEqual(session.history);
+    });
+
+    it("rejects malformed snapshots and invalid replay paths", () => {
+        expect(() => restoreTreeSpecSession(multiStepWire(), { version: 2, history: [] })).toThrow("Unsupported TreeSpec session snapshot version.");
+        expect(() => restoreTreeSpecSession(multiStepWire(), { version: 1, history: [{ nodeId: "a", choiceId: "missing" }] })).toThrow("Missing transition");
     });
 });
 

@@ -51,6 +51,7 @@ export type {
     NodeView,
     ScoreDelta,
     TreeSpecSessionState,
+    TreeSpecSessionSnapshot,
 } from "./types.js";
 
 export { emptyScoreDelta, mergeScoreDelta } from "./delta.js";
@@ -69,5 +70,7 @@ export {
 export {
     createInitialTreeSpecSession,
     dispatchTreeSpecChoice,
+    restoreTreeSpecSession,
+    serializeTreeSpecSession,
     treeSpecRuntimeIssues,
 } from "./session.js";
