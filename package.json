@@ -69,7 +69,7 @@
         "test:monorepo": "cd ../../frontend && yarn vitest run --config vitest.simulator-core.config.ts"
     },
     "dependencies": {
-        "@signalsafe/tree-spec": "^0.3.4"
+        "@signalsafe/tree-spec": "^0.4.0"
     },
     "devDependencies": {
         "typescript": "^7.0.2",
