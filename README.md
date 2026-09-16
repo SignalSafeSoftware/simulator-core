@@ -336,7 +336,7 @@ Examples are documentation-focused TypeScript files. They illustrate package usa
 
 ## Development
 
-Requires Node.js **>=22.12.0** (`engines.node`). CI runs checks, tests, and smoke on Node **22** and **24**; publish uses Node **24**. Node 20 is no longer supported (GitHub Actions Node 20 deprecation).
+Requires Node.js **>=19.0.0** (`engines.node`). CI runs checks, tests, and smoke on Node **22** and **24**; publish uses Node **24**.
 
 `yarn build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. No sibling checkout is required for release validation.
 
@@ -359,3 +359,9 @@ See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted cont
 ## Release 0.3.1
 
 Device contacts support `phone_numbers` and `email_addresses` containing `SimulatorContactValue` (`label`, original `value`, optional canonical `number`). Email details also preserve `bcc`. TreeSpec uses the published 0.4 line. See the changelog for the complete release record.
+
+## Node runtime compatibility
+
+The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools use
+Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
+with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.

@@ -14,7 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No unreleased changes recorded.
+### Changed
+
+- Lower the runtime requirement to Node >=19.0.0 and refresh the TreeSpec lockfile to 0.4.1.
+- Add isolated packed-consumer tests on Node 19.0.0 and Node 19–24; retain modern tooling checks on Node 22/24.
+
 
 ## [0.2.0] - 2026-09-08
 

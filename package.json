@@ -44,7 +44,7 @@
     "RELEASING.md"
   ],
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=19.0.0"
   },
   "packageManager": "yarn@1.22.22",
   "publishConfig": {
@@ -62,7 +62,7 @@
     "test:coverage": "yarn test --coverage"
   },
   "dependencies": {
-    "@signalsafe/tree-spec": "^0.4.0"
+    "@signalsafe/tree-spec": "^0.4.1"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^5.0.1",
