@@ -27,9 +27,18 @@ export interface SimulatorDevice {
 }
 
 /** Single contact; shared by phone, messages, etc. */
+/** A labeled contact endpoint. Value preserves display text; number is an optional dialable canonical number. */
+export interface SimulatorContactValue {
+    label: string;
+    value: string;
+    number?: string;
+}
+
 export interface SimulatorContact {
     id: string;
     display_name: string;
+    phone_numbers?: SimulatorContactValue[];
+    email_addresses?: SimulatorContactValue[];
     number?: string;
     email?: string;
 }
@@ -63,6 +72,7 @@ export interface SimulatorEmailMessageDetail {
     from_addr?: string;
     from_display_name?: string;
     to?: string;
+    bcc?: string;
     cc?: string;
     date_at?: string;
     unread?: boolean;

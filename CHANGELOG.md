@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 — 2026-09-16
+
+- Add labeled phone and email endpoint types to device contacts and preserve optional Bcc on email payloads.
+- Refresh TreeSpec to the published 0.4 line; retain a headless runtime with no React, network, or storage dependency.
+
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

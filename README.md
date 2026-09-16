@@ -338,7 +338,7 @@ Examples are documentation-focused TypeScript files. They illustrate package usa
 
 Requires Node.js **>=22.12.0** (`engines.node`). CI runs checks, tests, and smoke on Node **22** and **24**; publish uses Node **24**. Node 20 is no longer supported (GitHub Actions Node 20 deprecation).
 
-`yarn build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. Ecosystem sibling `paths` in `tsconfig.json` apply to local typecheck/tests only.
+`yarn build` uses `tsconfig.build.json` and resolves `@signalsafe/*` from `node_modules`. No sibling checkout is required for release validation.
 
 ```bash
 yarn install
@@ -355,3 +355,7 @@ See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted cont
 
 - [CHANGELOG.md](./CHANGELOG.md)
 - [RELEASING.md](./RELEASING.md)
+
+## Release 0.3.0
+
+Device contacts support `phone_numbers` and `email_addresses` containing `SimulatorContactValue` (`label`, original `value`, optional canonical `number`). Email details also preserve `bcc`. TreeSpec uses the published 0.4 line. See the changelog for the complete release record.

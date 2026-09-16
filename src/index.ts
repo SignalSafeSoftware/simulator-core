@@ -10,6 +10,7 @@ export type {
     BrowserFormField,
     SimulatorApp,
     SimulatorContact,
+    SimulatorContactValue,
     SimulatorDevice,
     SimulatorDevicePayload,
     SimulatorDirectoryEntry,
