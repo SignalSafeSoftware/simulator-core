@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.3.0 — 2026-09-16
+## 0.3.1 — 2026-09-16
 
+- Refresh release tooling to Vitest 5; preserve React 18 compatibility.
 - Add labeled phone and email endpoint types to device contacts and preserve optional Bcc on email payloads.
 - Refresh TreeSpec to the published 0.4 line; retain a headless runtime with no React, network, or storage dependency.
 
