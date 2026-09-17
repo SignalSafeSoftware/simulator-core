@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Node.js 22.12 or newer (see `package.json` `engines`). Only the latest published release line receives security fixes.
+Node.js 19.0.0 or newer (see `package.json` `engines`). The runtime compatibility matrix covers Node 19–24; build and test tooling requires Node 22/24. Use a maintained Node release for production. Only the latest published release line receives security fixes.
 
 ## Reporting a vulnerability
 

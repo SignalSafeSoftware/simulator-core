@@ -356,9 +356,9 @@ See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted cont
 - [CHANGELOG.md](./CHANGELOG.md)
 - [RELEASING.md](./RELEASING.md)
 
-## Release 0.3.1
+## Release 0.3.2
 
-Device contacts support `phone_numbers` and `email_addresses` containing `SimulatorContactValue` (`label`, original `value`, optional canonical `number`). Email details also preserve `bcc`. TreeSpec uses the published 0.4 line. See the changelog for the complete release record.
+Device contacts support `phone_numbers` and `email_addresses` containing `SimulatorContactValue` (`label`, original `value`, optional canonical `number`). Email details also preserve `bcc`. The runtime requires Node >=19.0.0 and TreeSpec ^0.4.1. See the changelog for the complete release record.
 
 ## Node runtime compatibility
 

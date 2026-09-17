@@ -24,3 +24,13 @@ Verify the exact version and registry integrity after the tag workflow succeeds.
 The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools use
 Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
 with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
+
+## Node 19 release sequence
+
+Publish core `0.3.2`, React `0.16.3`, then device `0.16.3`. React declares core
+`0.3.2`; device declares core `0.3.2` and React `0.16.3`. After each upstream
+publication, regenerate the downstream Yarn lockfile from npm and run a frozen
+install, typecheck, coverage, build, and packed-consumer smoke test before tagging.
+The runtime matrix must pass on Node 19.0.0 and Node 19–24 with strict engine
+checks against registry dependencies. Never substitute an unpublished tarball
+URL or invent registry integrity values in a release lockfile.

@@ -1,5 +1,13 @@
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { createInitialTreeSpecSession, dispatchTreeSpecChoice, serializeTreeSpecSession, restoreTreeSpecSession } from '@signalsafe/simulator-core';
+
+const require = createRequire(import.meta.url);
+const manifest = JSON.parse(readFileSync(resolve(dirname(require.resolve('@signalsafe/simulator-core')), '../package.json'), 'utf8'));
+assert.equal(manifest.version, '0.3.2');
+assert.equal(manifest.engines.node, '>=19.0.0');
 const wire = {
     start_node: 'a',
     nodes: {
@@ -24,4 +32,5 @@ const restored = restoreTreeSpecSession(wire, serializeTreeSpecSession(continued
 assert.equal(restored.currentNodeId, 'b');
 assert.deepEqual(restored.history, continued.state.history);
 assert.throws(() => restoreTreeSpecSession(wire, { version: 2, history: [] }));
+assert.equal(manifest.dependencies['@signalsafe/tree-spec'], '^0.4.1');
 console.log(`Runtime compatibility passed on ${process.version}`);

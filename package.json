@@ -1,6 +1,6 @@
 {
   "name": "@signalsafe/simulator-core",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
   "license": "MIT",
