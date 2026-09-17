@@ -187,10 +187,7 @@ jobs:
         name: Publish
         needs: [checks, tests, scan, smoke-package, runtime-compatibility]
         if: |
-            (
-              (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
-              (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
-            ) &&
+            startsWith(github.ref, 'refs/tags/v') &&
             needs.checks.result == 'success' &&
             needs.tests.result == 'success' &&
             (needs.scan.result == 'success' || needs.scan.result == 'skipped')
@@ -211,8 +208,15 @@ jobs:
             - name: Verify artifact before publish
               run: yarn smoke:package
 
-            - name: Check package version
-              run: node -e "const p=require('./package.json'); console.log(p.name, p.version)"
+            - name: Verify release tag matches package version
+              run: |
+                  node --input-type=module <<'NODE'
+                  import assert from 'node:assert/strict';
+                  import { readFileSync } from 'node:fs';
+                  const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+                  assert.equal(process.env.GITHUB_REF, `refs/tags/v${pkg.version}`, 'Release tag must match package.json version');
+                  console.log(pkg.name, pkg.version, process.env.GITHUB_REF);
+                  NODE
 
             - name: Configure npm auth
               run: |

@@ -1,6 +1,6 @@
 # Releasing `@signalsafe/simulator-core`
 
-Releases are produced by `.github/workflows/ci.yml` from a pushed `vX.Y.Z` tag. The tag must match `package.json`. The workflow also supports manual dispatch on main; use tags for the documented release sequence. Do not publish from a developer machine or move an existing release tag.
+Releases are produced by `.github/workflows/ci.yml` from a pushed `vX.Y.Z` tag. The tag must match `package.json`. Manual dispatch on branches runs validation only. Publishing requires a tag ref, and CI verifies that the tag exactly matches the package version. Do not publish from a developer machine or move an existing release tag.
 
 ## Preparation
 

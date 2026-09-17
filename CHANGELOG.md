@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Require a matching GitHub version tag for npm publication; branch workflow runs only validate.
+
 ## [0.3.2] - 2026-09-16
 
 ### Changed
