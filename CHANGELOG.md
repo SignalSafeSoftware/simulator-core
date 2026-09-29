@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.4.0 — prepared September 29, 2026 (unpublished)
+## 0.4.1 — prepared September 29, 2026
+
+- Correct the packed-runtime version assertion. The 0.4.0 tag failed CI and was not published; its tag is retained unchanged.
 
 - Add versioned local-device schemas, asset limits, record metadata, paged repository and `DeviceStore` host contracts.
 - Add pure simulated mail transitions, recipient handling and strict browser action envelopes. Simulated send preserves draft identity and performs no network request.

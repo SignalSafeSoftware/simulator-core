@@ -16,7 +16,7 @@ const manifest = JSON.parse(
         'utf8',
     ),
 );
-assert.equal(manifest.version, '0.3.2');
+assert.equal(manifest.version, '0.4.1');
 assert.equal(manifest.engines.node, '>=19.0.0');
 const wire = {
     start_node: 'a',

@@ -366,7 +366,7 @@ The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools us
 Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
 with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
 
-## Local app migration (0.4.0, release candidate)
+## Local app migration (0.4.1, release candidate)
 
 - Add versioned local-device schemas, asset limits, record metadata, paged repository and `DeviceStore` host contracts.
 - Add pure simulated mail transitions, recipient handling and strict browser action envelopes. Simulated send preserves draft identity and performs no network request.

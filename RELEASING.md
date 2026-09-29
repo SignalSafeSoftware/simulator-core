@@ -27,7 +27,7 @@ with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
 
 ## September 29 local-app migration release candidate
 
-Prepared versions are core `0.4.0`, React `0.17.0`, device `0.17.0` and theme
+Prepared versions are core `0.4.1`, React `0.17.0`, device `0.17.0` and theme
 `0.10.0`. Inspection approval was recorded in PhoneMe before extraction.
 The Node runtime contract remains unchanged.
 
