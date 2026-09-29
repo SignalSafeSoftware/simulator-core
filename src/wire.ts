@@ -1,14 +1,15 @@
 import {
     END_NODE_ID,
+    TREESPEC_WIRE_VERSION,
     isRecord,
     LEGACY_END_NODE_ID,
     lintTreeSpecWire,
     type TreeSpecNodeWire,
     type TreeSpecTransitionWire,
     type TreeSpecWire,
-} from "@signalsafe/tree-spec";
-import { TreeSpecRuntimeError } from "./errors.js";
-import { expectRuntimeObject } from "./guards.js";
+} from '@signalsafe/tree-spec';
+import { TreeSpecRuntimeError } from './errors.js';
+import { expectRuntimeObject } from './guards.js';
 
 const ObjectWithHasOwn = Object as ObjectConstructor & {
     hasOwn(target: object, property: PropertyKey): boolean;
@@ -19,37 +20,53 @@ function hasOwn(target: object, property: PropertyKey): boolean {
 }
 
 function expectStartNode(raw: Record<string, unknown>): string {
-    if (typeof raw.start_node !== "string" || raw.start_node.trim() === "") {
-        throw new TreeSpecRuntimeError(
-            "tree_spec.start_node must be a non-empty string.",
-        );
+    if (typeof raw.start_node !== 'string' || raw.start_node.trim() === '') {
+        throw new TreeSpecRuntimeError('tree_spec.start_node must be a non-empty string.');
     }
     return raw.start_node;
 }
 
-function expectNodes(
-    raw: Record<string, unknown>,
-): Record<string, TreeSpecNodeWire> {
+function expectNodes(raw: Record<string, unknown>): Record<string, TreeSpecNodeWire> {
     if (!isRecord(raw.nodes)) {
-        throw new TreeSpecRuntimeError("tree_spec.nodes must be an object.");
+        throw new TreeSpecRuntimeError('tree_spec.nodes must be an object.');
     }
     return raw.nodes as Record<string, TreeSpecNodeWire>;
 }
 
-function expectTransitions(
-    raw: Record<string, unknown>,
-): TreeSpecTransitionWire[] {
-    if (Array.isArray(raw.transitions)) {
-        return raw.transitions as TreeSpecTransitionWire[];
+function expectTransitions(raw: Record<string, unknown>): TreeSpecTransitionWire[] {
+    if (!Array.isArray(raw.transitions)) {
+        throw new TreeSpecRuntimeError('tree_spec.transitions must be an array.');
     }
-    throw new TreeSpecRuntimeError("tree_spec.transitions must be an array.");
+    return raw.transitions.map((value: unknown, index): TreeSpecTransitionWire => {
+        if (!isRecord(value)) {
+            throw new TreeSpecRuntimeError(`tree_spec.transitions[${index}] must be an object.`);
+        }
+        if (!Array.isArray(value.from) || value.from.length !== 2) {
+            throw new TreeSpecRuntimeError(
+                'Each transition.from must be a [node_id, choice_id] pair.',
+            );
+        }
+        const outcome = value.outcome;
+        if (
+            outcome !== undefined &&
+            outcome !== 'safe' &&
+            outcome !== 'at_risk' &&
+            outcome !== 'compromised'
+        ) {
+            throw new TreeSpecRuntimeError(`tree_spec.transitions[${index}].outcome is invalid.`);
+        }
+        return {
+            ...value,
+            from: [String(value.from[0] ?? ''), String(value.from[1] ?? '')],
+            to: String(value.to ?? ''),
+            ...(outcome === undefined ? {} : { outcome }),
+        };
+    });
 }
 
-function normalizeTransitions(
-    transitions: TreeSpecTransitionWire[],
-): TreeSpecTransitionWire[] {
+function normalizeTransitions(transitions: TreeSpecTransitionWire[]): TreeSpecTransitionWire[] {
     return transitions.map((transition) => {
-        const to = String(transition.to ?? "");
+        const to = String(transition.to ?? '');
         return {
             ...transition,
             to: to === LEGACY_END_NODE_ID ? END_NODE_ID : to,
@@ -75,16 +92,13 @@ function optionalAb(raw: Record<string, unknown>): { _ab?: unknown } {
 
 function throwOnLintErrors(spec: TreeSpecWire): void {
     for (const issue of lintTreeSpecWire(spec)) {
-        if (issue.severity === "error") {
+        if (issue.severity === 'error') {
             throw new TreeSpecRuntimeError(issue.message);
         }
     }
 }
 
-function choiceIdsForNode(
-    nodes: Record<string, TreeSpecNodeWire>,
-    nodeId: string,
-): Set<string> {
+function choiceIdsForNode(nodes: Record<string, TreeSpecNodeWire>, nodeId: string): Set<string> {
     const node = nodes[nodeId];
     if (!node) {
         return new Set<string>();
@@ -98,8 +112,8 @@ function validateTransitionFrom(
 ): { nodeId: string; choiceId: string } {
     const from = transition.from;
     if (Array.isArray(from) && from.length === 2) {
-        const nodeId = String(from[0] ?? "");
-        const choiceId = String(from[1] ?? "");
+        const nodeId = String(from[0] ?? '');
+        const choiceId = String(from[1] ?? '');
 
         if (hasOwn(nodes, nodeId)) {
             if (choiceIdsForNode(nodes, nodeId).has(choiceId)) {
@@ -110,13 +124,9 @@ function validateTransitionFrom(
             );
         }
 
-        throw new TreeSpecRuntimeError(
-            `Transition references unknown node '${nodeId}'.`,
-        );
+        throw new TreeSpecRuntimeError(`Transition references unknown node '${nodeId}'.`);
     }
-    throw new TreeSpecRuntimeError(
-        "Each transition.from must be a [node_id, choice_id] pair.",
-    );
+    throw new TreeSpecRuntimeError('Each transition.from must be a [node_id, choice_id] pair.');
 }
 
 function validateTransitionTarget(
@@ -130,15 +140,11 @@ function validateTransitionTarget(
     if (hasOwn(nodes, to)) {
         return;
     }
-    throw new TreeSpecRuntimeError(
-        `Transition references unknown target node '${to}'.`,
-    );
+    throw new TreeSpecRuntimeError(`Transition references unknown target node '${to}'.`);
 }
 
 /** Wire choices: `choices` or legacy `options`. */
-export function getWireChoices(
-    node: TreeSpecNodeWire,
-): Array<{ id: string; label: string }> {
+export function getWireChoices(node: TreeSpecNodeWire): Array<{ id: string; label: string }> {
     const raw = (node.choices?.length ? node.choices : node.options) ?? [];
     return raw.map((c) => ({ id: String(c.id), label: String(c.label) }));
 }
@@ -146,10 +152,17 @@ export function getWireChoices(
 /** Normalize legacy END token and validate structure (matches backend TreeSpecBuilder expectations). */
 export function parseTreeSpecRuntime(raw: unknown): TreeSpecWire {
     const runtime = expectRuntimeObject(raw);
+    const version = runtime.wire_version;
+    if (version !== undefined && version !== TREESPEC_WIRE_VERSION) {
+        throw new TreeSpecRuntimeError(
+            `Unsupported wire_version ${String(version)}; only ${TREESPEC_WIRE_VERSION} is supported.`,
+        );
+    }
     const startNode = expectStartNode(runtime);
     const nodes = expectNodes(runtime);
     const transitions = normalizeTransitions(expectTransitions(runtime));
     const spec: TreeSpecWire = {
+        ...(version === undefined ? {} : { wire_version: version }),
         start_node: startNode,
         nodes,
         transitions,
@@ -167,9 +180,7 @@ export function parseTreeSpecRuntime(raw: unknown): TreeSpecWire {
 
         return spec;
     }
-    throw new TreeSpecRuntimeError(
-        `Missing node '${spec.start_node}' referenced by start_node.`,
-    );
+    throw new TreeSpecRuntimeError(`Missing node '${spec.start_node}' referenced by start_node.`);
 }
 
 export function findTransitionForChoice(
@@ -188,7 +199,5 @@ export function findTransitionForChoice(
             return t;
         }
     }
-    throw new TreeSpecRuntimeError(
-        `Missing transition for (${nodeId}, ${choiceId}).`,
-    );
+    throw new TreeSpecRuntimeError(`Missing transition for (${nodeId}, ${choiceId}).`);
 }

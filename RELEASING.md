@@ -25,12 +25,22 @@ The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools us
 Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
 with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
 
-## Node 19 release sequence
+## September 29 local-app migration release candidate
 
-Publish core `0.3.2`, React `0.16.3`, then device `0.16.3`. React declares core
-`0.3.2`; device declares core `0.3.2` and React `0.16.3`. After each upstream
-publication, regenerate the downstream Yarn lockfile from npm and run a frozen
-install, typecheck, coverage, build, and packed-consumer smoke test before tagging.
-The runtime matrix must pass on Node 19.0.0 and Node 19–24 with strict engine
-checks against registry dependencies. Never substitute an unpublished tarball
-URL or invent registry integrity values in a release lockfile.
+Prepared versions are core `0.4.0`, React `0.17.0`, device `0.17.0` and theme
+`0.10.0`. Inspection approval was recorded in PhoneMe before extraction.
+The Node runtime contract remains unchanged.
+
+Publish core first, then React, then device through matching version-tag CI;
+theme can publish independently. Refresh React's registry Yarn lock after core
+is available, and device's after core, React and theme are available. Those
+unpublished upstream resolutions cannot yet be certified by a frozen registry
+install. Never invent integrity values or substitute sibling paths in release
+manifests. Run the registry smoke/runtime matrix and Sonar gates as documented
+above before publication; local tarball validation is not registry evidence.
+
+The `simulator-device/examples/local-apps` example builds under React 18 and has
+a browser workflow (`npm run test:browser`). Before publication, copy it to an
+isolated temporary directory and install all four packed artifacts explicitly.
+Its memory adapter intentionally resets on reload; durable storage, imports,
+regional formatting and live services belong to the consuming application.

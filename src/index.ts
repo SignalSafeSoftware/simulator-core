@@ -4,7 +4,7 @@
  * Depends on `@signalsafe/tree-spec` for the wire format only.
  */
 
-export { TreeSpecRuntimeError } from "./errors.js";
+export { TreeSpecRuntimeError } from './errors.js';
 
 export type {
     BrowserFormField,
@@ -37,12 +37,9 @@ export type {
     SimulatorSmsThreadSummary,
     SmsMessageAttachment,
     SmsThreadMessage,
-} from "./devicePayload.js";
+} from './devicePayload.js';
 
-export {
-    hasDeviceEntryPoint,
-    isSimulatorDevicePayload,
-} from "./devicePayloadGuards.js";
+export { hasDeviceEntryPoint, isSimulatorDevicePayload } from './devicePayloadGuards.js';
 
 export type {
     DispatchContinue,
@@ -53,20 +50,13 @@ export type {
     ScoreDelta,
     TreeSpecSessionState,
     TreeSpecSessionSnapshot,
-} from "./types.js";
+} from './types.js';
 
-export { emptyScoreDelta, mergeScoreDelta } from "./delta.js";
+export { emptyScoreDelta, mergeScoreDelta } from './delta.js';
 
-export {
-    findTransitionForChoice,
-    getWireChoices,
-    parseTreeSpecRuntime,
-} from "./wire.js";
+export { findTransitionForChoice, getWireChoices, parseTreeSpecRuntime } from './wire.js';
 
-export {
-    getTreeSpecNodeView,
-    resolveFeedbackForTransition,
-} from "./nodeView.js";
+export { getTreeSpecNodeView, resolveFeedbackForTransition } from './nodeView.js';
 
 export {
     createInitialTreeSpecSession,
@@ -74,4 +64,20 @@ export {
     restoreTreeSpecSession,
     serializeTreeSpecSession,
     treeSpecRuntimeIssues,
-} from "./session.js";
+} from './session.js';
+
+export { validateDeviceJson } from './validateDeviceJson.js';
+
+export * from './apps/contracts.js';
+
+export * from './apps/deviceData.js';
+
+export * from './apps/mail.js';
+
+export * from './apps/emailService.js';
+
+export * from './apps/id.js';
+
+export * from './apps/browserProtocol.js';
+
+export * from './apps/store.js';

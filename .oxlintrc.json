@@ -1,0 +1,32 @@
+{
+  "plugins": [
+    "eslint",
+    "typescript",
+    "react",
+    "jsx-a11y"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-var": "error",
+    "prefer-const": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": "error",
+    "react/rules-of-hooks": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/**"
+      ],
+      "rules": {
+        "react/no-children-prop": "off"
+      }
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — prepared September 29, 2026 (unpublished)
+
+- Add versioned local-device schemas, asset limits, record metadata, paged repository and `DeviceStore` host contracts.
+- Add pure simulated mail transitions, recipient handling and strict browser action envelopes. Simulated send preserves draft identity and performs no network request.
+- Add Zod 4 as a runtime dependency. Existing simulator records retain storage version 1; no data rewrite is required.
+
+- Compile and execute the repository examples against the packed public API during package smoke checks.
+
 ## [Unreleased]
 
 ### Changed

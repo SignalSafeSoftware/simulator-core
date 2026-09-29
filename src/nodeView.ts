@@ -1,12 +1,10 @@
-import { isRecord, type TreeSpecWire } from "@signalsafe/tree-spec";
-import { TreeSpecRuntimeError } from "./errors.js";
-import { getWireChoices } from "./wire.js";
-import type { MicroFeedback, NodeView } from "./types.js";
+import { isRecord, type TreeSpecWire } from '@signalsafe/tree-spec';
+import { TreeSpecRuntimeError } from './errors.js';
+import { getWireChoices } from './wire.js';
+import type { MicroFeedback, NodeView } from './types.js';
 
 function getChoiceFeedback(choice: unknown): unknown {
-    return isRecord(choice) && "feedback" in choice
-        ? choice.feedback
-        : undefined;
+    return isRecord(choice) && 'feedback' in choice ? choice.feedback : undefined;
 }
 
 function parseMicroFeedback(x: unknown): MicroFeedback | null {
@@ -14,25 +12,20 @@ function parseMicroFeedback(x: unknown): MicroFeedback | null {
     const o = x;
     const red = o.red_flags;
     const feedback: MicroFeedback = {
-        ...(typeof o.key === "string" ? { key: o.key } : {}),
-        ...(typeof o.title === "string" ? { title: o.title } : {}),
-        ...(typeof o.body === "string" ? { body: o.body } : {}),
-        ...(typeof o.takeaway === "string" ? { takeaway: o.takeaway } : {}),
+        ...(typeof o.key === 'string' ? { key: o.key } : {}),
+        ...(typeof o.title === 'string' ? { title: o.title } : {}),
+        ...(typeof o.body === 'string' ? { body: o.body } : {}),
+        ...(typeof o.takeaway === 'string' ? { takeaway: o.takeaway } : {}),
         ...(Array.isArray(red)
             ? {
-                  red_flags: red.filter(
-                      (item): item is string => typeof item === "string",
-                  ),
+                  red_flags: red.filter((item): item is string => typeof item === 'string'),
               }
             : {}),
     };
     return Object.keys(feedback).length > 0 ? feedback : null;
 }
 
-export function getTreeSpecNodeView(
-    spec: TreeSpecWire,
-    nodeId: string,
-): NodeView {
+export function getTreeSpecNodeView(spec: TreeSpecWire, nodeId: string): NodeView {
     const n = spec.nodes[nodeId];
     if (!n) {
         throw new TreeSpecRuntimeError(`Missing node '${nodeId}'.`);
@@ -43,8 +36,8 @@ export function getTreeSpecNodeView(
     }));
     return {
         id: nodeId,
-        type: String(n.type ?? "prompt"),
-        prompt: String(n.prompt ?? ""),
+        type: String(n.type ?? 'prompt'),
+        prompt: String(n.prompt ?? ''),
         choices,
         render_hints: isRecord(n.render_hints) ? n.render_hints : {},
     };

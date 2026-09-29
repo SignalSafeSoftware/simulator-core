@@ -4,7 +4,7 @@
  */
 
 /** App identifier for entry point and device menu. */
-export type SimulatorApp = "phone" | "email" | "messages" | "internet" | "home";
+export type SimulatorApp = 'phone' | 'email' | 'messages' | 'internet' | 'home';
 
 /** Where the scenario starts: which app and which screen within it. */
 export interface SimulatorEntryPoint {
@@ -97,7 +97,9 @@ export interface SmsMessageAttachment {
 }
 
 export interface SmsThreadMessage {
-    from: "them" | "me";
+    /** Stable host identity for history reconciliation; optional for legacy scenarios. */
+    id?: string;
+    from: 'them' | 'me';
     text: string;
     delay_seconds?: number;
     timestamp?: string;
@@ -129,7 +131,7 @@ export interface SimulatorMessagesApp {
 
 export interface BrowserFormField {
     name: string;
-    type: "text" | "password" | "email";
+    type: 'text' | 'password' | 'email';
     label: string;
 }
 
@@ -177,7 +179,7 @@ export interface SimulatorPhoneApp {
         id: string;
         number?: string;
         name?: string;
-        direction?: "in" | "out" | "missed" | "voicemail";
+        direction?: 'in' | 'out' | 'missed' | 'voicemail';
         timestamp?: string;
     }>;
     contacts?: string[];
@@ -225,25 +227,25 @@ export interface SimulatorDevicePayload {
 
 /** Phone screen ids used by session/runtime navigation. */
 export type SimulatorPhoneScreenId =
-    | "history"
-    | "contacts"
-    | "add_contact"
-    | "dial"
-    | "incoming_call"
-    | "voicemail"
-    | "directory";
+    | 'history'
+    | 'contacts'
+    | 'add_contact'
+    | 'dial'
+    | 'incoming_call'
+    | 'voicemail'
+    | 'directory';
 
 /** Email screen ids used by session/runtime navigation. */
-export type SimulatorEmailScreenId = "list" | "detail" | "compose" | "outbox" | "trash";
+export type SimulatorEmailScreenId = 'list' | 'detail' | 'compose' | 'outbox' | 'trash';
 
 /** Messages screen ids used by session/runtime navigation. */
-export type SimulatorMessagesScreenId = "threads" | "thread_detail" | "new_thread";
+export type SimulatorMessagesScreenId = 'threads' | 'thread_detail' | 'new_thread';
 
 /** Internet entry screen for full-device authoring (`pages` list vs single `page`). */
-export type SimulatorInternetScreenId = "pages" | "page";
+export type SimulatorInternetScreenId = 'pages' | 'page';
 
 /** Home screen ids used by session/runtime navigation. */
-export type SimulatorHomeScreenId = "home" | "store" | "settings";
+export type SimulatorHomeScreenId = 'home' | 'store' | 'settings';
 
 /** Union of app screen id types for authoring helpers. */
 export type SimulatorScreenId =

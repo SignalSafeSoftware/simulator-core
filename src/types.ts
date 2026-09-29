@@ -1,4 +1,4 @@
-import type { TerminalOutcome, TreeSpecWire } from "@signalsafe/tree-spec";
+import type { TerminalOutcome, TreeSpecWire } from '@signalsafe/tree-spec';
 
 /** Score delta applied when taking a transition (matches backend Delta shape). */
 export type ScoreDelta = {
@@ -42,7 +42,7 @@ export type TreeSpecSessionSnapshot = {
 };
 
 export type DispatchContinue = {
-    status: "continue";
+    status: 'continue';
     state: TreeSpecSessionState;
     node: NodeView;
     appliedDelta: ScoreDelta;
@@ -50,7 +50,7 @@ export type DispatchContinue = {
 };
 
 export type DispatchEnded = {
-    status: "ended";
+    status: 'ended';
     state: TreeSpecSessionState;
     outcome: TerminalOutcome;
     appliedDelta: ScoreDelta;

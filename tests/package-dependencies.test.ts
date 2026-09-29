@@ -1,11 +1,9 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-const pkg = JSON.parse(
-    readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
-) as {
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
     name?: string;
     dependencies?: Record<string, string>;
     peerDependencies?: Record<string, string>;
@@ -46,10 +44,7 @@ function packageNameFromSpecifier(specifier: string): string | null {
 
 function externalImports(text: string): string[] {
     const imports: string[] = [];
-    const patterns = [
-        /\bfrom\s+['"]([^'"]+)['"]/g,
-        /\bimport\s+['"]([^'"]+)['"]/g,
-    ];
+    const patterns = [/\bfrom\s+['"]([^'"]+)['"]/g, /\bimport\s+['"]([^'"]+)['"]/g];
     for (const pattern of patterns) {
         for (const match of text.matchAll(pattern)) {
             const name = packageNameFromSpecifier(match[1] ?? '');

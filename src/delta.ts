@@ -1,5 +1,5 @@
-import { isRecord } from "@signalsafe/tree-spec";
-import type { ScoreDelta } from "./types.js";
+import { isRecord } from '@signalsafe/tree-spec';
+import type { ScoreDelta } from './types.js';
 
 export function emptyScoreDelta(): ScoreDelta {
     return {
@@ -18,13 +18,13 @@ export function mergeScoreDelta(base: ScoreDelta, delta: unknown): ScoreDelta {
     const d = delta;
     const n = (k: keyof ScoreDelta) => {
         const v = d[k as string];
-        return typeof v === "number" && !Number.isNaN(v) ? v : 0;
+        return typeof v === 'number' && !Number.isNaN(v) ? v : 0;
     };
     return {
-        total: base.total + n("total"),
-        awareness: base.awareness + n("awareness"),
-        verification: base.verification + n("verification"),
-        impulse_control: base.impulse_control + n("impulse_control"),
-        damage_containment: base.damage_containment + n("damage_containment"),
+        total: base.total + n('total'),
+        awareness: base.awareness + n('awareness'),
+        verification: base.verification + n('verification'),
+        impulse_control: base.impulse_control + n('impulse_control'),
+        damage_containment: base.damage_containment + n('damage_containment'),
     };
 }

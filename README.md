@@ -365,3 +365,20 @@ Device contacts support `phone_numbers` and `email_addresses` containing `Simula
 The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools use
 Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
 with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
+
+## Local app migration (0.4.0, release candidate)
+
+- Add versioned local-device schemas, asset limits, record metadata, paged repository and `DeviceStore` host contracts.
+- Add pure simulated mail transitions, recipient handling and strict browser action envelopes. Simulated send preserves draft identity and performs no network request.
+- Add Zod 4 as a runtime dependency. Existing simulator records retain storage version 1; no data rewrite is required.
+
+This version is prepared locally; it is not a claim of registry publication. See
+[RELEASING.md](RELEASING.md) for the coordinated release order. PhoneMe validates
+normal packed artifacts; installed package files are never patched.
+
+### Example verification
+
+`npm run smoke:package` compiles and executes the repository examples in an
+isolated consumer against the packed public API. The examples do not resolve
+sibling source trees or private source imports. The shared React 18 local-app
+workflow is in [simulator-device/examples/local-apps](https://github.com/SignalSafeSoftware/simulator-device/tree/main/examples/local-apps).

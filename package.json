@@ -1,6 +1,6 @@
 {
   "name": "@signalsafe/simulator-core",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "type": "module",
   "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
   "license": "MIT",
@@ -52,22 +52,27 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "yarn typecheck",
+    "lint": "oxlint src tests --deny-warnings",
     "typecheck": "tsc --noEmit",
     "publish:dry-run": "npm publish --dry-run",
     "smoke:package": "node scripts/smoke-package.mjs",
     "prepublishOnly": "npm run build",
     "prepare": "npm run build",
     "test": "vitest run",
-    "test:coverage": "yarn test --coverage"
+    "test:coverage": "yarn test --coverage",
+    "format": "oxfmt src tests",
+    "format:check": "oxfmt --check src tests"
   },
   "dependencies": {
-    "@signalsafe/tree-spec": "^0.4.1"
+    "@signalsafe/tree-spec": "^0.4.1",
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^5.0.1",
+    "oxfmt": "0.61.0",
+    "oxlint": "1.76.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.1",
-    "vite": "^8.3.0"
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
   }
 }

@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { END_NODE_ID, type TreeSpecWire } from "@signalsafe/tree-spec";
+import { describe, expect, it } from 'vitest';
+import { END_NODE_ID, type TreeSpecWire } from '@signalsafe/tree-spec';
 import {
     createInitialTreeSpecSession,
     dispatchTreeSpecChoice,
@@ -8,145 +8,152 @@ import {
     restoreTreeSpecSession,
     serializeTreeSpecSession,
     resolveFeedbackForTransition,
-} from "../src/index";
+} from '../src/index';
 
 const multiStepWire = (): TreeSpecWire => ({
-    start_node: "a",
+    start_node: 'a',
     nodes: {
         a: {
-            type: "prompt",
-            prompt: "Start",
-            choices: [{ id: "go", label: "Go" }],
+            type: 'prompt',
+            prompt: 'Start',
+            choices: [{ id: 'go', label: 'Go' }],
         },
         b: {
-            type: "prompt",
-            prompt: "Finish",
-            choices: [{ id: "end", label: "End" }],
+            type: 'prompt',
+            prompt: 'Finish',
+            choices: [{ id: 'end', label: 'End' }],
         },
     },
     transitions: [
         {
-            from: ["a", "go"],
-            to: "b",
+            from: ['a', 'go'],
+            to: 'b',
             delta: { total: 2, awareness: 1 },
         },
         {
-            from: ["b", "end"],
+            from: ['b', 'end'],
             to: END_NODE_ID,
-            outcome: "at_risk",
+            outcome: 'at_risk',
             delta: { total: 3 },
         },
     ],
 });
 
-describe("session lifecycle", () => {
-    it("walks continue then END with cumulative score and history", () => {
-        let session = createInitialTreeSpecSession(multiStepWire());
-        expect(session.currentNodeId).toBe("a");
+describe('session lifecycle', () => {
+    it('walks continue then END with cumulative score and history', () => {
+        const session = createInitialTreeSpecSession(multiStepWire());
+        expect(session.currentNodeId).toBe('a');
         expect(session.history).toEqual([]);
 
-        const step1 = dispatchTreeSpecChoice(session, "a", "go");
-        expect(step1.status).toBe("continue");
-        if (step1.status !== "continue") return;
+        const step1 = dispatchTreeSpecChoice(session, 'a', 'go');
+        expect(step1.status).toBe('continue');
+        if (step1.status !== 'continue') return;
 
-        expect(step1.state.currentNodeId).toBe("b");
-        expect(step1.state.history).toEqual([{ nodeId: "a", choiceId: "go" }]);
+        expect(step1.state.currentNodeId).toBe('b');
+        expect(step1.state.history).toEqual([{ nodeId: 'a', choiceId: 'go' }]);
         expect(step1.state.cumulativeScore.total).toBe(2);
         expect(step1.state.cumulativeScore.awareness).toBe(1);
 
-        const step2 = dispatchTreeSpecChoice(step1.state, "b", "end");
-        expect(step2.status).toBe("ended");
-        if (step2.status !== "ended") return;
+        const step2 = dispatchTreeSpecChoice(step1.state, 'b', 'end');
+        expect(step2.status).toBe('ended');
+        if (step2.status !== 'ended') return;
 
-        expect(step2.outcome).toBe("at_risk");
+        expect(step2.outcome).toBe('at_risk');
         expect(step2.state.currentNodeId).toBe(END_NODE_ID);
         expect(step2.state.history).toEqual([
-            { nodeId: "a", choiceId: "go" },
-            { nodeId: "b", choiceId: "end" },
+            { nodeId: 'a', choiceId: 'go' },
+            { nodeId: 'b', choiceId: 'end' },
         ]);
         expect(step2.state.cumulativeScore.total).toBe(5);
     });
 
-    it("does not mutate the prior session object on dispatch", () => {
+    it('does not mutate the prior session object on dispatch', () => {
         const session = createInitialTreeSpecSession(multiStepWire());
-        const step1 = dispatchTreeSpecChoice(session, "a", "go");
-        if (step1.status !== "continue") return;
+        const step1 = dispatchTreeSpecChoice(session, 'a', 'go');
+        if (step1.status !== 'continue') return;
 
-        expect(session.currentNodeId).toBe("a");
+        expect(session.currentNodeId).toBe('a');
         expect(session.history).toEqual([]);
 
-        const step2 = dispatchTreeSpecChoice(step1.state, "b", "end");
-        if (step2.status !== "ended") return;
+        const step2 = dispatchTreeSpecChoice(step1.state, 'b', 'end');
+        if (step2.status !== 'ended') return;
 
-        expect(session.currentNodeId).toBe("a");
+        expect(session.currentNodeId).toBe('a');
         expect(session.history).toEqual([]);
-        expect(step1.state.history).toEqual([{ nodeId: "a", choiceId: "go" }]);
+        expect(step1.state.history).toEqual([{ nodeId: 'a', choiceId: 'go' }]);
     });
 
-    it("prefers transition feedback over choice feedback when both exist", () => {
+    it('prefers transition feedback over choice feedback when both exist', () => {
         const wire: TreeSpecWire = {
-            start_node: "a",
+            start_node: 'a',
             nodes: {
                 a: {
                     choices: [
                         {
-                            id: "c1",
-                            label: "Go",
-                            feedback: { key: "choice", title: "Choice wins?" },
+                            id: 'c1',
+                            label: 'Go',
+                            feedback: { key: 'choice', title: 'Choice wins?' },
                         },
                     ],
                 },
             },
             transitions: [
                 {
-                    from: ["a", "c1"],
+                    from: ['a', 'c1'],
                     to: END_NODE_ID,
-                    outcome: "safe",
-                    feedback: { key: "transition", title: "Transition wins" },
+                    outcome: 'safe',
+                    feedback: { key: 'transition', title: 'Transition wins' },
                 },
             ],
         };
 
         const session = createInitialTreeSpecSession(wire);
-        const result = dispatchTreeSpecChoice(session, "a", "c1");
-        expect(result.status).toBe("ended");
-        if (result.status !== "ended") return;
+        const result = dispatchTreeSpecChoice(session, 'a', 'c1');
+        expect(result.status).toBe('ended');
+        if (result.status !== 'ended') return;
 
         expect(result.feedback).toEqual({
-            key: "transition",
-            title: "Transition wins",
+            key: 'transition',
+            title: 'Transition wins',
         });
         expect(
-            resolveFeedbackForTransition(wire, "a", "c1", {
-                key: "transition",
-                title: "Transition wins",
+            resolveFeedbackForTransition(wire, 'a', 'c1', {
+                key: 'transition',
+                title: 'Transition wins',
             }),
-        ).toEqual({ key: "transition", title: "Transition wins" });
+        ).toEqual({ key: 'transition', title: 'Transition wins' });
     });
 
-    it("serializes only history and restores derived state by replay", () => {
+    it('serializes only history and restores derived state by replay', () => {
         let session = createInitialTreeSpecSession(multiStepWire());
-        const first = dispatchTreeSpecChoice(session, "a", "go");
-        if (first.status !== "continue") return;
+        const first = dispatchTreeSpecChoice(session, 'a', 'go');
+        if (first.status !== 'continue') return;
         session = first.state;
 
         const snapshot = serializeTreeSpecSession(session);
-        expect(snapshot).toEqual({ version: 1, history: [{ nodeId: "a", choiceId: "go" }] });
+        expect(snapshot).toEqual({ version: 1, history: [{ nodeId: 'a', choiceId: 'go' }] });
         const restored = restoreTreeSpecSession(multiStepWire(), snapshot);
 
-        expect(restored.currentNodeId).toBe("b");
+        expect(restored.currentNodeId).toBe('b');
         expect(restored.cumulativeScore.total).toBe(2);
         expect(restored.history).toEqual(session.history);
     });
 
-    it("rejects malformed snapshots and invalid replay paths", () => {
-        expect(() => restoreTreeSpecSession(multiStepWire(), { version: 2, history: [] })).toThrow("Unsupported TreeSpec session snapshot version.");
-        expect(() => restoreTreeSpecSession(multiStepWire(), { version: 1, history: [{ nodeId: "a", choiceId: "missing" }] })).toThrow("Missing transition");
+    it('rejects malformed snapshots and invalid replay paths', () => {
+        expect(() => restoreTreeSpecSession(multiStepWire(), { version: 2, history: [] })).toThrow(
+            'Unsupported TreeSpec session snapshot version.',
+        );
+        expect(() =>
+            restoreTreeSpecSession(multiStepWire(), {
+                version: 1,
+                history: [{ nodeId: 'a', choiceId: 'missing' }],
+            }),
+        ).toThrow('Missing transition');
     });
 });
 
-describe("score delta helpers", () => {
-    it("returns zeroed deltas from emptyScoreDelta", () => {
+describe('score delta helpers', () => {
+    it('returns zeroed deltas from emptyScoreDelta', () => {
         expect(emptyScoreDelta()).toEqual({
             total: 0,
             awareness: 0,
@@ -156,7 +163,7 @@ describe("score delta helpers", () => {
         });
     });
 
-    it("treats NaN as zero when merging and ignores non-record deltas", () => {
+    it('treats NaN as zero when merging and ignores non-record deltas', () => {
         const base = emptyScoreDelta();
         expect(
             mergeScoreDelta(base, {
@@ -167,6 +174,6 @@ describe("score delta helpers", () => {
             ...base,
             awareness: 3,
         });
-        expect(mergeScoreDelta(base, "not-a-record")).toEqual(base);
+        expect(mergeScoreDelta(base, 'not-a-record')).toEqual(base);
     });
 });

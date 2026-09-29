@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
  * @param {{
  *   runtimeChecks?: Array<{ subpath?: string; exports: string[] }>;
  *   typecheckSubpaths?: string[];
+ *   examples?: string[];
  * }} config
  */
 function fixNodeEsmRelativeImports(targetDir) {
@@ -75,7 +76,9 @@ function fixNodeEsmRelativeImports(targetDir) {
     }
 
     if (changedFiles > 0) {
-        console.log(`fix-node-esm-relative-imports: updated ${changedFiles} file(s) in ${targetDir}`);
+        console.log(
+            `fix-node-esm-relative-imports: updated ${changedFiles} file(s) in ${targetDir}`,
+        );
     }
 }
 
@@ -137,10 +140,14 @@ export function runSmokePackage(config) {
     runStandaloneBuild(root, npmCmd);
 
     const packDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smoke-pack-'));
-    const packOutput = execFileSync(npmCmd, ['pack', '--ignore-scripts', '--pack-destination', packDir], {
-        cwd: root,
-        encoding: 'utf8',
-    });
+    const packOutput = execFileSync(
+        npmCmd,
+        ['pack', '--ignore-scripts', '--pack-destination', packDir],
+        {
+            cwd: root,
+            encoding: 'utf8',
+        },
+    );
     const tgzName = packOutput
         .trim()
         .split('\n')
@@ -197,6 +204,10 @@ export function runSmokePackage(config) {
 
         if (config.typecheckSubpaths?.length) {
             runTypeChecks(consumerDir, pkg.name, config.typecheckSubpaths);
+        }
+
+        if (config.examples?.length) {
+            runExampleChecks(root, consumerDir, config.examples);
         }
 
         console.log(`smoke-package: OK (${pkg.name}@${pkg.version})`);
@@ -292,11 +303,7 @@ function verifyTarballContents(tgzPath, pkg) {
         .split('\n')
         .filter(Boolean);
 
-    const required = new Set([
-        'package/package.json',
-        'package/README.md',
-        'package/LICENSE',
-    ]);
+    const required = new Set(['package/package.json', 'package/README.md', 'package/LICENSE']);
 
     const addPackagePath = (relativePath) => {
         if (!relativePath) {
@@ -342,4 +349,46 @@ function verifyTarballContents(tgzPath, pkg) {
     }
 
     console.log(`tarball contents audit OK (${listing.length} paths)`);
+}
+
+/** Compile and execute shipped authoring examples against the installed artifact. */
+function runExampleChecks(root, consumerDir, examples) {
+    const sourceDir = path.join(consumerDir, 'examples');
+    fs.mkdirSync(sourceDir);
+    for (const example of examples) {
+        fs.copyFileSync(path.join(root, 'examples', example), path.join(sourceDir, example));
+    }
+    const configPath = path.join(consumerDir, 'tsconfig.examples.json');
+    fs.writeFileSync(
+        configPath,
+        JSON.stringify(
+            {
+                compilerOptions: {
+                    target: 'ES2022',
+                    module: 'NodeNext',
+                    moduleResolution: 'NodeNext',
+                    strict: true,
+                    skipLibCheck: true,
+                    rootDir: 'examples',
+                    outDir: 'examples-dist',
+                },
+                include: ['examples/*.ts'],
+            },
+            null,
+            2,
+        ),
+    );
+    execFileSync(
+        process.execPath,
+        [path.join(consumerDir, 'node_modules/typescript/bin/tsc'), '-p', configPath],
+        { cwd: consumerDir, stdio: 'inherit' },
+    );
+    for (const example of examples) {
+        execFileSync(
+            process.execPath,
+            [path.join(consumerDir, 'examples-dist', example.replace(/\.ts$/, '.js'))],
+            { cwd: consumerDir, stdio: 'inherit' },
+        );
+    }
+    console.log(`package examples OK (${examples.length})`);
 }
