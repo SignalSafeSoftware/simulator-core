@@ -20,8 +20,3 @@ export function expectTerminalOutcome(outcome: unknown): TerminalOutcome {
             throw new TreeSpecRuntimeError('Transition to END must include a valid outcome.');
     }
 }
-
-/** Exhaustiveness check for discriminated-union dispatch handling. */
-export function assertNever(value: never): never {
-    throw new TreeSpecRuntimeError(`Unexpected discriminated value: ${String(value)}`);
-}

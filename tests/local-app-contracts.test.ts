@@ -4,14 +4,15 @@ import {
     simulatorStoreSchema,
     secretSchema,
     photoMetadataSchema,
+} from '../src/apps/contracts.js';
+import {
     browserActionSchema,
     BROWSER_ACTION_TYPE,
     BROWSER_ACTION_VERSION,
-    newMail,
-    replyMail,
-    localEmailService,
-    summarizeDevice,
-} from '../src/index';
+} from '../src/apps/browserProtocol.js';
+import { newMail, replyMail } from '../src/apps/mail.js';
+import { localEmailService } from '../src/apps/emailService.js';
+import { summarizeDevice } from '../src/apps/deviceData.js';
 
 describe('portable local-app contracts', () => {
     it('retains versioned records, counts and source-independent validation', () => {

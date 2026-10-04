@@ -3,14 +3,11 @@ import { END_NODE_ID, LEGACY_END_NODE_ID, type TreeSpecWire } from '@signalsafe/
 import {
     createInitialTreeSpecSession,
     dispatchTreeSpecChoice,
-    findTransitionForChoice,
-    getTreeSpecNodeView,
-    getWireChoices,
-    mergeScoreDelta,
-    parseTreeSpecRuntime,
-    resolveFeedbackForTransition,
     treeSpecRuntimeIssues,
-} from '../src/index';
+} from '../src/session.js';
+import { findTransitionForChoice, parseTreeSpecRuntime } from '../src/wire.js';
+import { getTreeSpecNodeView, resolveFeedbackForTransition } from '../src/nodeView.js';
+import { mergeScoreDelta } from '../src/delta.js';
 import { TreeSpecRuntimeError } from '../src/errors';
 
 const minimalWire = (): TreeSpecWire => ({
@@ -98,17 +95,19 @@ describe('parseTreeSpecRuntime', () => {
         expect(issues[0]?.severity).toBe('error');
     });
 
-    it('normalizes legacy END tokens and legacy node options', () => {
-        const parsed = parseTreeSpecRuntime({
-            start_node: 'a',
-            nodes: {
-                a: { options: [{ id: 'c1', label: 'Go' }] },
-            },
-            transitions: [{ from: ['a', 'c1'], to: LEGACY_END_NODE_ID, outcome: 'safe' }],
-        });
-
-        expect(parsed.transitions[0]?.to).toBe(END_NODE_ID);
-        expect(getWireChoices(parsed.nodes.a)).toEqual([{ id: 'c1', label: 'Go' }]);
+    it('rejects removed node options and noncanonical terminal tokens', () => {
+        expect(() =>
+            parseTreeSpecRuntime({
+                ...minimalWire(),
+                nodes: { a: { options: [{ id: 'c1', label: 'Go' }] } },
+            }),
+        ).toThrow("migrate it to 'choices'");
+        expect(() =>
+            parseTreeSpecRuntime({
+                ...minimalWire(),
+                transitions: [{ from: ['a', 'c1'], to: LEGACY_END_NODE_ID, outcome: 'safe' }],
+            }),
+        ).toThrow('unknown target');
     });
 
     it('accepts known non-END target nodes', () => {
@@ -472,7 +471,7 @@ describe('runtime helpers', () => {
         expect(resolveFeedbackForTransition(spec, 'a', 'c2', {})).toBeNull();
     });
 
-    it('returns null when the node has no matching choices or options', () => {
+    it('returns null when the node has no matching choices', () => {
         const spec = parseTreeSpecRuntime({
             start_node: 'a',
             nodes: {
@@ -490,7 +489,7 @@ describe('runtime helpers', () => {
             start_node: 'a',
             nodes: {
                 a: {
-                    options: [
+                    choices: [
                         {
                             id: 'skip',
                             label: 'Skip',
@@ -498,7 +497,7 @@ describe('runtime helpers', () => {
                         },
                         {
                             id: 'c1',
-                            label: 'Legacy option',
+                            label: 'Canonical choice',
                             feedback: {
                                 key: 'choice-feedback',
                                 title: 'Choice feedback',
@@ -519,7 +518,7 @@ describe('runtime helpers', () => {
             prompt: '',
             choices: [
                 { id: 'skip', label: 'Skip' },
-                { id: 'c1', label: 'Legacy option' },
+                { id: 'c1', label: 'Canonical choice' },
             ],
             render_hints: {},
         });

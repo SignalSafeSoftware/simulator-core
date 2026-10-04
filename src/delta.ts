@@ -15,16 +15,18 @@ export function mergeScoreDelta(base: ScoreDelta, delta: unknown): ScoreDelta {
     if (!isRecord(delta)) {
         return { ...base };
     }
-    const d = delta;
-    const n = (k: keyof ScoreDelta) => {
-        const v = d[k as string];
-        return typeof v === 'number' && !Number.isNaN(v) ? v : 0;
+    const add = (key: keyof ScoreDelta): number => {
+        const value = delta[key];
+        if (typeof value !== 'number' || !Number.isFinite(value)) return base[key];
+        const result = base[key] + value;
+        // Ignore invalid deltas, including finite additions that overflow.
+        return Number.isFinite(result) ? result : base[key];
     };
     return {
-        total: base.total + n('total'),
-        awareness: base.awareness + n('awareness'),
-        verification: base.verification + n('verification'),
-        impulse_control: base.impulse_control + n('impulse_control'),
-        damage_containment: base.damage_containment + n('damage_containment'),
+        total: add('total'),
+        awareness: add('awareness'),
+        verification: add('verification'),
+        impulse_control: add('impulse_control'),
+        damage_containment: add('damage_containment'),
     };
 }

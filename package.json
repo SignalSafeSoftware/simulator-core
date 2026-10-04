@@ -1,6 +1,6 @@
 {
   "name": "@signalsafe/simulator-core",
-  "version": "0.4.1",
+  "version": "0.5.0-cleanup.3",
   "type": "module",
   "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
   "license": "MIT",
@@ -27,21 +27,101 @@
     "signalsafe"
   ],
   "sideEffects": false,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
+    "./apps/browserProtocol": {
+      "types": "./dist/apps/browserProtocol.d.ts",
+      "import": "./dist/apps/browserProtocol.js",
+      "default": "./dist/apps/browserProtocol.js"
+    },
+    "./apps/contracts": {
+      "types": "./dist/apps/contracts.d.ts",
+      "import": "./dist/apps/contracts.js",
+      "default": "./dist/apps/contracts.js"
+    },
+    "./apps/deviceData": {
+      "types": "./dist/apps/deviceData.d.ts",
+      "import": "./dist/apps/deviceData.js",
+      "default": "./dist/apps/deviceData.js"
+    },
+    "./apps/emailService": {
+      "types": "./dist/apps/emailService.d.ts",
+      "import": "./dist/apps/emailService.js",
+      "default": "./dist/apps/emailService.js"
+    },
+    "./apps/id": {
+      "types": "./dist/apps/id.d.ts",
+      "import": "./dist/apps/id.js",
+      "default": "./dist/apps/id.js"
+    },
+    "./apps/mail": {
+      "types": "./dist/apps/mail.d.ts",
+      "import": "./dist/apps/mail.js",
+      "default": "./dist/apps/mail.js"
+    },
+    "./apps/store": {
+      "types": "./dist/apps/store.d.ts",
+      "import": "./dist/apps/store.js",
+      "default": "./dist/apps/store.js"
+    },
+    "./delta": {
+      "types": "./dist/delta.d.ts",
+      "import": "./dist/delta.js",
+      "default": "./dist/delta.js"
+    },
+    "./devicePayload": {
+      "types": "./dist/devicePayload.d.ts",
+      "import": "./dist/devicePayload.js",
+      "default": "./dist/devicePayload.js"
+    },
+    "./devicePayloadGuards": {
+      "types": "./dist/devicePayloadGuards.d.ts",
+      "import": "./dist/devicePayloadGuards.js",
+      "default": "./dist/devicePayloadGuards.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js",
+      "default": "./dist/errors.js"
+    },
+    "./nodeView": {
+      "types": "./dist/nodeView.d.ts",
+      "import": "./dist/nodeView.js",
+      "default": "./dist/nodeView.js"
+    },
+    "./session": {
+      "types": "./dist/session.d.ts",
+      "import": "./dist/session.js",
+      "default": "./dist/session.js"
+    },
+    "./simulatorApp": {
+      "types": "./dist/simulatorApp.d.ts",
+      "import": "./dist/simulatorApp.js",
+      "default": "./dist/simulatorApp.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "default": "./dist/types.js"
+    },
+    "./validateDeviceJson": {
+      "types": "./dist/validateDeviceJson.d.ts",
+      "import": "./dist/validateDeviceJson.js",
+      "default": "./dist/validateDeviceJson.js"
+    },
+    "./wire": {
+      "types": "./dist/wire.d.ts",
+      "import": "./dist/wire.js",
+      "default": "./dist/wire.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "RELEASING.md"
+    "RELEASING.md",
+    "MIGRATION.md"
   ],
   "engines": {
     "node": ">=19.0.0"
@@ -51,17 +131,22 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "lint": "oxlint src tests --deny-warnings",
-    "typecheck": "tsc --noEmit",
+    "build": "npm run check:artifacts && node scripts/clean-dist.mjs && tsc -p tsconfig.build.json",
+    "lint": "npm run check:modules && oxlint src tests --deny-warnings",
+    "typecheck": "tsc --noEmit && npm run typecheck:tests",
     "publish:dry-run": "npm publish --dry-run",
     "smoke:package": "node scripts/smoke-package.mjs",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run check:release && npm run build",
     "prepare": "npm run build",
     "test": "vitest run",
     "test:coverage": "yarn test --coverage",
     "format": "oxfmt src tests",
-    "format:check": "oxfmt --check src tests"
+    "format:check": "oxfmt --check src tests",
+    "check:artifacts": "node scripts/check-package-artifacts.mjs",
+    "check:release": "node scripts/check-package-artifacts.mjs --release",
+    "check:modules": "node scripts/check-module-boundaries.mjs",
+    "typecheck:tests": "tsc --noEmit -p tsconfig.tests.json",
+    "test:migration": "node --test scripts/migrate-input-json.test.mjs"
   },
   "dependencies": {
     "@signalsafe/tree-spec": "^0.4.1",
@@ -73,6 +158,7 @@
     "oxlint": "1.76.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.1"
+    "vitest": "^5.0.1",
+    "@types/node": "22.17.0"
   }
 }

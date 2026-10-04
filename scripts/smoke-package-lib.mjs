@@ -137,6 +137,7 @@ export function runSmokePackage(config) {
         });
     };
 
+    run(['run', 'build']);
     runStandaloneBuild(root, npmCmd);
 
     const packDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smoke-pack-'));
@@ -166,7 +167,7 @@ export function runSmokePackage(config) {
     try {
         const dependencies = {
             [pkg.name]: `file:${tgzPath}`,
-            ...getRegistryDeps(pkg),
+            ...getRegistryDeps(pkg, root),
             ...getPeerInstallVersions(pkg),
         };
 
@@ -189,6 +190,9 @@ export function runSmokePackage(config) {
                     private: true,
                     type: 'module',
                     dependencies,
+                    overrides: Object.fromEntries(Object.entries(dependencies)
+                        .filter(([name, range]) => name !== pkg.name && range.startsWith('file:'))
+                        .map(([name]) => [name, `$${name}`])),
                     devDependencies,
                 },
                 null,
@@ -217,11 +221,11 @@ export function runSmokePackage(config) {
     }
 }
 
-function getRegistryDeps(pkg) {
+function getRegistryDeps(pkg, root) {
     const out = {};
     for (const [name, range] of Object.entries(pkg.dependencies || {})) {
         if (name.startsWith('@signalsafe/')) {
-            out[name] = range;
+            out[name] = range.startsWith('file:') ? `file:${path.resolve(root, range.slice(5))}` : range;
         }
     }
     return out;

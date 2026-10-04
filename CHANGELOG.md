@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0-cleanup.3 (local, unpublished)
+
+Remove legacy conversion, wire and presentation aliases; migrate consumers to canonical contracts. See MIGRATION.md.
+
 ## 0.4.1 — prepared September 29, 2026
 
 - Correct the packed-runtime version assertion. The 0.4.0 tag failed CI and was not published; its tag is retained unchanged.

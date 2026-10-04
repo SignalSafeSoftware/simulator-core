@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { hasDeviceEntryPoint, isSimulatorDevicePayload } from '../src/devicePayloadGuards.js';
 import type { SimulatorDevicePayload } from '../src/devicePayload.js';
-import * as simulatorCore from '../src/index.js';
 
 describe('device payload guards', () => {
     it('hasDeviceEntryPoint requires entry_point.app string', () => {
@@ -21,9 +20,9 @@ describe('device payload guards', () => {
 });
 
 describe('device payload exports', () => {
-    it('re-exports payload types and guards from the public barrel', () => {
-        expect(typeof simulatorCore.hasDeviceEntryPoint).toBe('function');
-        expect(typeof simulatorCore.isSimulatorDevicePayload).toBe('function');
+    it('re-exports payload types and guards from the public modules', () => {
+        expect(typeof hasDeviceEntryPoint).toBe('function');
+        expect(typeof isSimulatorDevicePayload).toBe('function');
     });
 });
 

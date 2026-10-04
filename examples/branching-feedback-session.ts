@@ -1,10 +1,6 @@
 import { END_NODE_ID, type TreeSpecWire } from "@signalsafe/tree-spec";
-import {
-    createInitialTreeSpecSession,
-    dispatchTreeSpecChoice,
-    parseTreeSpecRuntime,
-    treeSpecRuntimeIssues,
-} from "@signalsafe/simulator-core";
+import { createInitialTreeSpecSession, dispatchTreeSpecChoice, treeSpecRuntimeIssues } from '@signalsafe/simulator-core/session';
+import { parseTreeSpecRuntime } from '@signalsafe/simulator-core/wire';
 
 const wire: TreeSpecWire = {
     start_node: "start",

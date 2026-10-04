@@ -3,8 +3,7 @@
  * Framework-agnostic; consumed by simulator-react adapters and simulator-device UI.
  */
 
-/** App identifier for entry point and device menu. */
-export type SimulatorApp = 'phone' | 'email' | 'messages' | 'internet' | 'home';
+import type { SimulatorApp } from './simulatorApp.js';
 
 /** Where the scenario starts: which app and which screen within it. */
 export interface SimulatorEntryPoint {
@@ -97,7 +96,7 @@ export interface SmsMessageAttachment {
 }
 
 export interface SmsThreadMessage {
-    /** Stable host identity for history reconciliation; optional for legacy scenarios. */
+    /** Stable host identity for history reconciliation; optional for authored scenario messages. */
     id?: string;
     from: 'them' | 'me';
     text: string;
@@ -138,7 +137,6 @@ export interface BrowserFormField {
 export interface SimulatorPageButton {
     label?: string;
     href?: string;
-    targetPageId?: string;
     target_page_id?: string;
 }
 
@@ -192,7 +190,6 @@ export interface SimulatorPhoneApp {
         caller_name?: string;
         timestamp?: string;
     };
-    voicemail_transcript?: string;
 }
 
 export interface SimulatorHomeApp {
@@ -225,27 +222,71 @@ export interface SimulatorDevicePayload {
     directory?: SimulatorDirectoryEntry[];
 }
 
-/** Phone screen ids used by session/runtime navigation. */
+/** Built-in phone screen IDs; browser page IDs remain free-form. */
+export const SimulatorPhoneScreenId = Object.freeze({
+    History: 'history',
+    Contacts: 'contacts',
+    AddContact: 'add_contact',
+    Dial: 'dial',
+    IncomingCall: 'incoming_call',
+    Voicemail: 'voicemail',
+    Directory: 'directory',
+} as const);
 export type SimulatorPhoneScreenId =
-    | 'history'
-    | 'contacts'
-    | 'add_contact'
-    | 'dial'
-    | 'incoming_call'
-    | 'voicemail'
-    | 'directory';
+    (typeof SimulatorPhoneScreenId)[keyof typeof SimulatorPhoneScreenId];
+const phoneScreens: ReadonlySet<string> = new Set(Object.values(SimulatorPhoneScreenId));
+export function isPhoneScreen(value: unknown): value is SimulatorPhoneScreenId {
+    return typeof value === 'string' && phoneScreens.has(value);
+}
 
-/** Email screen ids used by session/runtime navigation. */
-export type SimulatorEmailScreenId = 'list' | 'detail' | 'compose' | 'outbox' | 'trash';
+/** Built-in email screen IDs; browser page IDs remain free-form. */
+export const SimulatorEmailScreenId = Object.freeze({
+    List: 'list',
+    Detail: 'detail',
+    Compose: 'compose',
+    Outbox: 'outbox',
+    Trash: 'trash',
+} as const);
+export type SimulatorEmailScreenId =
+    (typeof SimulatorEmailScreenId)[keyof typeof SimulatorEmailScreenId];
+const emailScreens: ReadonlySet<string> = new Set(Object.values(SimulatorEmailScreenId));
+export function isEmailScreen(value: unknown): value is SimulatorEmailScreenId {
+    return typeof value === 'string' && emailScreens.has(value);
+}
 
-/** Messages screen ids used by session/runtime navigation. */
-export type SimulatorMessagesScreenId = 'threads' | 'thread_detail' | 'new_thread';
+/** Built-in messages screen IDs; browser page IDs remain free-form. */
+export const SimulatorMessagesScreenId = Object.freeze({
+    Threads: 'threads',
+    ThreadDetail: 'thread_detail',
+    NewThread: 'new_thread',
+} as const);
+export type SimulatorMessagesScreenId =
+    (typeof SimulatorMessagesScreenId)[keyof typeof SimulatorMessagesScreenId];
+const messagesScreens: ReadonlySet<string> = new Set(Object.values(SimulatorMessagesScreenId));
+export function isMessagesScreen(value: unknown): value is SimulatorMessagesScreenId {
+    return typeof value === 'string' && messagesScreens.has(value);
+}
 
-/** Internet entry screen for full-device authoring (`pages` list vs single `page`). */
-export type SimulatorInternetScreenId = 'pages' | 'page';
+/** Built-in internet screen IDs; browser page IDs remain free-form. */
+export const SimulatorInternetScreenId = Object.freeze({
+    Pages: 'pages',
+    Page: 'page',
+} as const);
+export type SimulatorInternetScreenId =
+    (typeof SimulatorInternetScreenId)[keyof typeof SimulatorInternetScreenId];
 
-/** Home screen ids used by session/runtime navigation. */
-export type SimulatorHomeScreenId = 'home' | 'store' | 'settings';
+/** Built-in home screen IDs; browser page IDs remain free-form. */
+export const SimulatorHomeScreenId = Object.freeze({
+    Home: 'home',
+    Store: 'store',
+    Settings: 'settings',
+} as const);
+export type SimulatorHomeScreenId =
+    (typeof SimulatorHomeScreenId)[keyof typeof SimulatorHomeScreenId];
+const homeScreens: ReadonlySet<string> = new Set(Object.values(SimulatorHomeScreenId));
+export function isHomeScreen(value: unknown): value is SimulatorHomeScreenId {
+    return typeof value === 'string' && homeScreens.has(value);
+}
 
 /** Union of app screen id types for authoring helpers. */
 export type SimulatorScreenId =

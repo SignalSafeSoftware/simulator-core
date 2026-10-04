@@ -1,8 +1,8 @@
 import {
     END_NODE_ID,
+    TERMINAL_OUTCOME,
     TREESPEC_WIRE_VERSION,
     isRecord,
-    LEGACY_END_NODE_ID,
     lintTreeSpecWire,
     type TreeSpecNodeWire,
     type TreeSpecTransitionWire,
@@ -30,6 +30,13 @@ function expectNodes(raw: Record<string, unknown>): Record<string, TreeSpecNodeW
     if (!isRecord(raw.nodes)) {
         throw new TreeSpecRuntimeError('tree_spec.nodes must be an object.');
     }
+    for (const [id, node] of Object.entries(raw.nodes)) {
+        if (isRecord(node) && hasOwn(node, 'options')) {
+            throw new TreeSpecRuntimeError(
+                `Node '${id}' uses removed field 'options'; migrate it to 'choices'.`,
+            );
+        }
+    }
     return raw.nodes as Record<string, TreeSpecNodeWire>;
 }
 
@@ -49,9 +56,9 @@ function expectTransitions(raw: Record<string, unknown>): TreeSpecTransitionWire
         const outcome = value.outcome;
         if (
             outcome !== undefined &&
-            outcome !== 'safe' &&
-            outcome !== 'at_risk' &&
-            outcome !== 'compromised'
+            outcome !== TERMINAL_OUTCOME.SAFE &&
+            outcome !== TERMINAL_OUTCOME.AT_RISK &&
+            outcome !== TERMINAL_OUTCOME.COMPROMISED
         ) {
             throw new TreeSpecRuntimeError(`tree_spec.transitions[${index}].outcome is invalid.`);
         }
@@ -60,16 +67,6 @@ function expectTransitions(raw: Record<string, unknown>): TreeSpecTransitionWire
             from: [String(value.from[0] ?? ''), String(value.from[1] ?? '')],
             to: String(value.to ?? ''),
             ...(outcome === undefined ? {} : { outcome }),
-        };
-    });
-}
-
-function normalizeTransitions(transitions: TreeSpecTransitionWire[]): TreeSpecTransitionWire[] {
-    return transitions.map((transition) => {
-        const to = String(transition.to ?? '');
-        return {
-            ...transition,
-            to: to === LEGACY_END_NODE_ID ? END_NODE_ID : to,
         };
     });
 }
@@ -143,13 +140,13 @@ function validateTransitionTarget(
     throw new TreeSpecRuntimeError(`Transition references unknown target node '${to}'.`);
 }
 
-/** Wire choices: `choices` or legacy `options`. */
+/** Read choices from the canonical wire format. */
 export function getWireChoices(node: TreeSpecNodeWire): Array<{ id: string; label: string }> {
-    const raw = (node.choices?.length ? node.choices : node.options) ?? [];
+    const raw = node.choices ?? [];
     return raw.map((c) => ({ id: String(c.id), label: String(c.label) }));
 }
 
-/** Normalize legacy END token and validate structure (matches backend TreeSpecBuilder expectations). */
+/** Validate canonical TreeSpec structure and references. */
 export function parseTreeSpecRuntime(raw: unknown): TreeSpecWire {
     const runtime = expectRuntimeObject(raw);
     const version = runtime.wire_version;
@@ -160,7 +157,7 @@ export function parseTreeSpecRuntime(raw: unknown): TreeSpecWire {
     }
     const startNode = expectStartNode(runtime);
     const nodes = expectNodes(runtime);
-    const transitions = normalizeTransitions(expectTransitions(runtime));
+    const transitions = expectTransitions(runtime);
     const spec: TreeSpecWire = {
         ...(version === undefined ? {} : { wire_version: version }),
         start_node: startNode,

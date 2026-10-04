@@ -53,7 +53,7 @@ export function resolveFeedbackForTransition(
     if (fb && Object.keys(fb).length > 0) return fb;
     const n = spec.nodes[nodeId];
     if (!n) return null;
-    const rawChoices = (n.choices?.length ? n.choices : n.options) ?? [];
+    const rawChoices = n.choices ?? [];
     for (const choice of rawChoices) {
         if (String(choice.id) !== choiceId) continue;
         const raw = getChoiceFeedback(choice);

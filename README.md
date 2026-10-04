@@ -58,11 +58,9 @@ https://github.com/SignalSafeSoftware/simulator-core
 
 ```ts
 import { END_NODE_ID, type TreeSpecWire } from "@signalsafe/tree-spec";
-import {
-    createInitialTreeSpecSession,
-    dispatchTreeSpecChoice,
-    getTreeSpecNodeView,
-} from "@signalsafe/simulator-core";
+import { createInitialTreeSpecSession } from '@signalsafe/simulator-core/session';
+import { dispatchTreeSpecChoice } from '@signalsafe/simulator-core/session';
+import { getTreeSpecNodeView } from '@signalsafe/simulator-core/nodeView';
 
 const wire: TreeSpecWire = {
     start_node: "start",
@@ -121,10 +119,8 @@ console.log(result.state.cumulativeScore);
 Use `treeSpecRuntimeIssues()` when you want a non-throwing validation pass that returns user-facing issues. Use `parseTreeSpecRuntime()` when invalid payloads should fail immediately.
 
 ```ts
-import {
-    parseTreeSpecRuntime,
-    treeSpecRuntimeIssues,
-} from "@signalsafe/simulator-core";
+import { parseTreeSpecRuntime } from '@signalsafe/simulator-core/wire';
+import { treeSpecRuntimeIssues } from '@signalsafe/simulator-core/session';
 import type { TreeSpecWire } from "@signalsafe/tree-spec";
 
 const raw = someUnknownValue as TreeSpecWire;
@@ -142,11 +138,9 @@ if (issues.length > 0) {
 
 ```ts
 import { END_NODE_ID, type TreeSpecWire } from "@signalsafe/tree-spec";
-import {
-    createInitialTreeSpecSession,
-    dispatchTreeSpecChoice,
-    treeSpecRuntimeIssues,
-} from "@signalsafe/simulator-core";
+import { createInitialTreeSpecSession } from '@signalsafe/simulator-core/session';
+import { dispatchTreeSpecChoice } from '@signalsafe/simulator-core/session';
+import { treeSpecRuntimeIssues } from '@signalsafe/simulator-core/session';
 
 const wire: TreeSpecWire = {
     start_node: "start",
@@ -240,11 +234,9 @@ console.log(finalStep.feedback);
 ### Inspect the current node and raw choices
 
 ```ts
-import {
-    getTreeSpecNodeView,
-    getWireChoices,
-    parseTreeSpecRuntime,
-} from "@signalsafe/simulator-core";
+import { getTreeSpecNodeView } from '@signalsafe/simulator-core/nodeView';
+import { getWireChoices } from '@signalsafe/simulator-core/wire';
+import { parseTreeSpecRuntime } from '@signalsafe/simulator-core/wire';
 
 const spec = parseTreeSpecRuntime(wire);
 const currentNode = getTreeSpecNodeView(spec, spec.start_node);
@@ -269,10 +261,8 @@ console.log(rawChoices.map((choice) => choice.label));
 Snapshots are graph-only and versioned:
 
 ```ts
-import {
-    restoreTreeSpecSession,
-    serializeTreeSpecSession,
-} from "@signalsafe/simulator-core";
+import { restoreTreeSpecSession } from '@signalsafe/simulator-core/session';
+import { serializeTreeSpecSession } from '@signalsafe/simulator-core/session';
 
 const snapshot = serializeTreeSpecSession(session);
 const restored = restoreTreeSpecSession(wire, snapshot);
@@ -382,3 +372,14 @@ normal packed artifacts; installed package files are never patched.
 isolated consumer against the packed public API. The examples do not resolve
 sibling source trees or private source imports. The shared React 18 local-app
 workflow is in [simulator-device/examples/local-apps](https://github.com/SignalSafeSoftware/simulator-device/tree/main/examples/local-apps).
+
+### Shared app identifiers
+
+Import `SimulatorApp` and `isSimulatorApp` directly from `@signalsafe/simulator-core`.
+Use `SimulatorApp.Phone`, `.Email`, `.Messages`, `.Internet`, and `.Home` for app IDs.
+The frozen enum-style object also supplies the `SimulatorApp` string-union type; existing JSON
+values stay compatible. Use `isSimulatorApp(value)` at untrusted boundaries and
+`Object.values(SimulatorApp)` when enumerating all apps. Do not confuse app IDs with
+channels (`sms`, `browser`, `contacts`), screen names, or contact/input field kinds.
+
+See [AGENTS.md](./AGENTS.md) for module ownership and verification rules. Root imports were removed in the local audit prerelease; use the explicit owner paths shown in the examples.

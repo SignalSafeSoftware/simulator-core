@@ -1,3 +1,4 @@
+import { SimulatorApp } from './simulatorApp.js';
 import type { SimulatorDevicePayload } from './devicePayload.js';
 
 type Rule = (value: unknown, path: string) => void;
@@ -29,7 +30,8 @@ const object =
     (fields: Record<string, Rule>, required: readonly string[] = []): Rule =>
     (v, p) => {
         if (!record(v)) return fail(p, 'an object');
-        for (const key of required) if (!(key in v)) fail(`${p}.${key}`, 'a value');
+        for (const key of required)
+            if (!(key in v) || v[key] === undefined) fail(`${p}.${key}`, 'a value');
         for (const [key, rule] of Object.entries(fields))
             if (v[key] !== undefined) rule(v[key], `${p}.${key}`);
     };
@@ -46,7 +48,7 @@ const array =
             }
         });
     };
-const app = oneOf('phone', 'email', 'messages', 'internet', 'home');
+const app = oneOf(...Object.values(SimulatorApp));
 const link = object({ href: text, text, title: text }, ['href', 'text']);
 const emailFields = {
     id: text,
@@ -76,13 +78,9 @@ const schema = object(
         entry_point: object({ app, screen: text }, ['app', 'screen']),
         device: object({
             main_menu_items: array(object({ id: text, label: text, app }, ['id', 'label']), true),
-            secondary_defaults: object({
-                phone: text,
-                email: text,
-                messages: text,
-                internet: text,
-                home: text,
-            }),
+            secondary_defaults: object(
+                Object.fromEntries(Object.values(SimulatorApp).map((id) => [id, text])),
+            ),
         }),
         contacts: array(
             object(
@@ -146,7 +144,6 @@ const schema = object(
                 caller_name: text,
                 timestamp: text,
             }),
-            voicemail_transcript: text,
         }),
         email: object({
             messages: array(
@@ -213,7 +210,6 @@ const schema = object(
                             object({
                                 label: text,
                                 href: text,
-                                targetPageId: text,
                                 target_page_id: text,
                             }),
                         ),
@@ -260,5 +256,14 @@ const schema = object(
 
 /** Validate the existing full-device JSON format (unversioned or schema_version: 1). */
 export function validateDeviceJson(value: unknown): asserts value is SimulatorDevicePayload {
+    if (
+        record(value) &&
+        record(value.phone) &&
+        Object.prototype.hasOwnProperty.call(value.phone, 'voicemail_transcript')
+    ) {
+        throw new Error(
+            'Removed simulator field phone.voicemail_transcript; migrate it to phone.voicemail.transcript.',
+        );
+    }
     schema(value, '$');
 }

@@ -1,21 +1,22 @@
 {
-    "compilerOptions": {
-        "target": "ES2020",
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "strict": true,
-        "skipLibCheck": true,
-        "noEmit": true,
-        "isolatedModules": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "paths": {
-            "@signalsafe/tree-spec": ["../tree-spec/src/index.ts"],
-            "@signalsafe/tree-spec/*": ["../tree-spec/src/*"]
-        }
-    },
-    "include": ["src/**/*.ts"],
-    "exclude": ["tests/**", "node_modules"]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "tests/**",
+    "node_modules"
+  ]
 }

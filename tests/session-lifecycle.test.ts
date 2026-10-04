@@ -3,12 +3,11 @@ import { END_NODE_ID, type TreeSpecWire } from '@signalsafe/tree-spec';
 import {
     createInitialTreeSpecSession,
     dispatchTreeSpecChoice,
-    emptyScoreDelta,
-    mergeScoreDelta,
     restoreTreeSpecSession,
     serializeTreeSpecSession,
-    resolveFeedbackForTransition,
-} from '../src/index';
+} from '../src/session.js';
+import { emptyScoreDelta, mergeScoreDelta } from '../src/delta.js';
+import { resolveFeedbackForTransition } from '../src/nodeView.js';
 
 const multiStepWire = (): TreeSpecWire => ({
     start_node: 'a',

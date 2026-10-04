@@ -3,10 +3,9 @@ import { END_NODE_ID, TERMINAL_OUTCOME, type TreeSpecWire } from '@signalsafe/tr
 import {
     createInitialTreeSpecSession,
     dispatchTreeSpecChoice,
-    emptyScoreDelta,
-    mergeScoreDelta,
     treeSpecRuntimeIssues,
-} from '../src/index';
+} from '../src/session.js';
+import { emptyScoreDelta, mergeScoreDelta } from '../src/delta.js';
 import { TreeSpecRuntimeError } from '../src/errors';
 
 function singleChoiceWire(
@@ -104,7 +103,7 @@ describe('dispatchTreeSpecChoice behavior', () => {
             }),
         ).toEqual({
             ...base,
-            total: Number.POSITIVE_INFINITY,
+            total: 0,
             verification: 2,
         });
 

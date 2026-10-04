@@ -62,12 +62,17 @@ export function deviceMetadata({
     return metadata;
 }
 export function summarizeDevice(state: SimulatorStore): DeviceSummary {
-    const secrets: Record<string, number> = {};
-    const mail: Record<string, number> = {};
-    for (const record of state.secrets) secrets[record.folder] = (secrets[record.folder] ?? 0) + 1;
-    for (const record of state.mail) mail[record.folder] = (mail[record.folder] ?? 0) + 1;
+    const secrets = new Map<string, number>();
+    const mail = new Map<string, number>();
+    for (const record of state.secrets)
+        secrets.set(record.folder, (secrets.get(record.folder) ?? 0) + 1);
+    for (const record of state.mail) mail.set(record.folder, (mail.get(record.folder) ?? 0) + 1);
     return {
         metadata: deviceMetadata(state),
-        counts: { secrets, mail, photos: state.photos.length },
+        counts: {
+            secrets: Object.fromEntries(secrets),
+            mail: Object.fromEntries(mail),
+            photos: state.photos.length,
+        },
     };
 }
