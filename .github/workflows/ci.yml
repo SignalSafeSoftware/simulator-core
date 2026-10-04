@@ -116,6 +116,17 @@ jobs:
               env:
                   SONAR_TOKEN: ${{ secrets.PACKAGES_SONAR_TOKEN }}
 
+            - name: Report SonarCloud background task
+              if: always()
+              run: |
+                  url=$(grep '^ceTaskUrl=' .scannerwork/report-task.txt | cut -d= -f2-)
+                  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+                      task=$(curl -sS -u "$SONAR_TOKEN:" "$url" || true)
+                      status=$(echo "$task" | jq -r '.task.status // empty')
+                      case "$status" in PENDING|IN_PROGRESS|"") sleep 5 ;; *) break ;; esac
+                  done
+                  echo "$task" | jq '.task | {status, errorMessage, errorType, warningCount}'
+
             - name: Sonar PR comment
               if: github.event_name == 'pull_request'
               uses: actions/github-script@v9
