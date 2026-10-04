@@ -116,16 +116,17 @@ jobs:
               env:
                   SONAR_TOKEN: ${{ secrets.PACKAGES_SONAR_TOKEN }}
 
-            - name: Report SonarCloud background task
+            - name: Report SonarCloud new-code issues
               if: always()
               run: |
                   url=$(grep '^ceTaskUrl=' .scannerwork/report-task.txt | cut -d= -f2-)
-                  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-                      task=$(curl -sS -u "$SONAR_TOKEN:" "$url" || true)
-                      status=$(echo "$task" | jq -r '.task.status // empty')
+                  for attempt in $(seq 1 24); do
+                      status=$(curl -sS -u "$SONAR_TOKEN:" "$url" | jq -r '.task.status // empty')
                       case "$status" in PENDING|IN_PROGRESS|"") sleep 5 ;; *) break ;; esac
                   done
-                  echo "$task" | jq '.task | {status, errorMessage, errorType, warningCount}'
+                  echo "task status: $status"
+                  response=$(curl -sS -u "$SONAR_TOKEN:" "https://sonarcloud.io/api/issues/search?organization=signalsafesoftware&componentKeys=signalsafe-package-simulator-core&branch=main&inNewCodePeriod=true&resolved=false&ps=100")
+                  echo "$response" | jq -r '(.errors // [] | map(.msg)[]), "total: \(.total)", (.issues[]? | "\(.severity) \(.type) \(.rule) \(.component | sub("^[^:]*:";"")):\(.line // 0) \(.message)")'
 
             - name: Sonar PR comment
               if: github.event_name == 'pull_request'
