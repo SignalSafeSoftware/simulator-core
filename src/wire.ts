@@ -106,24 +106,16 @@ function choiceIdsForNode(nodes: Record<string, TreeSpecNodeWire>, nodeId: strin
 function validateTransitionFrom(
     nodes: Record<string, TreeSpecNodeWire>,
     transition: TreeSpecTransitionWire,
-): { nodeId: string; choiceId: string } {
-    const from = transition.from;
-    if (Array.isArray(from) && from.length === 2) {
-        const nodeId = String(from[0] ?? '');
-        const choiceId = String(from[1] ?? '');
-
-        if (hasOwn(nodes, nodeId)) {
-            if (choiceIdsForNode(nodes, nodeId).has(choiceId)) {
-                return { nodeId, choiceId };
-            }
-            throw new TreeSpecRuntimeError(
-                `Transition references unknown choice '${choiceId}' on node '${nodeId}'.`,
-            );
-        }
-
+): void {
+    const [nodeId, choiceId] = transition.from;
+    if (!hasOwn(nodes, nodeId)) {
         throw new TreeSpecRuntimeError(`Transition references unknown node '${nodeId}'.`);
     }
-    throw new TreeSpecRuntimeError('Each transition.from must be a [node_id, choice_id] pair.');
+    if (!choiceIdsForNode(nodes, nodeId).has(choiceId)) {
+        throw new TreeSpecRuntimeError(
+            `Transition references unknown choice '${choiceId}' on node '${nodeId}'.`,
+        );
+    }
 }
 
 function validateTransitionTarget(
