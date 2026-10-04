@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0-cleanup.3 (local, unpublished)
+## 0.5.0 — October 4, 2026
 
 Remove legacy conversion, wire and presentation aliases; migrate consumers to canonical contracts. See MIGRATION.md.
 
