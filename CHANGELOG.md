@@ -1,9 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 — October 4, 2026
 
 - Export `ReplyKind` (`reply`, `reply-all`, `forward`) from `apps/mail` and type `replyMail` with it.
 - Replace repeated string literals with constants; no behavior change.
+- Add `check:cycles` and `check:duplication` to CI.
+- Update development dependencies.
 
 ## 0.5.0 — October 4, 2026
 
