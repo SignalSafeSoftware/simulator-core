@@ -1,3 +1,4 @@
+import { hasOwn } from './guards.js';
 import { SimulatorApp } from './simulatorApp.js';
 import type { SimulatorDevicePayload } from './devicePayload.js';
 
@@ -256,11 +257,7 @@ const schema = object(
 
 /** Validate the existing full-device JSON format (unversioned or schema_version: 1). */
 export function validateDeviceJson(value: unknown): asserts value is SimulatorDevicePayload {
-    if (
-        record(value) &&
-        record(value.phone) &&
-        Object.prototype.hasOwnProperty.call(value.phone, 'voicemail_transcript')
-    ) {
+    if (record(value) && record(value.phone) && hasOwn(value.phone, 'voicemail_transcript')) {
         throw new Error(
             'Removed simulator field phone.voicemail_transcript; migrate it to phone.voicemail.transcript.',
         );

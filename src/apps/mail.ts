@@ -36,18 +36,18 @@ export function newMail(identity: string): Mail {
         updatedAt: now,
     };
 }
+function replyRecipients(source: Mail, own: string, kind: 'reply' | 'reply-all' | 'forward') {
+    if (kind === 'forward') return [];
+    const origin = addresses(source.from).includes(own) ? source.to : source.from;
+    return addresses(origin).filter((value) => value !== own);
+}
 export function replyMail(
     source: Mail,
     identity: string,
     kind: 'reply' | 'reply-all' | 'forward',
 ): Mail {
     const own = identity.toLowerCase();
-    const to =
-        kind === 'forward'
-            ? []
-            : addresses(addresses(source.from).includes(own) ? source.to : source.from).filter(
-                  (value) => value !== own,
-              );
+    const to = replyRecipients(source, own, kind);
     const cc =
         kind === 'reply-all'
             ? [...new Set([...addresses(source.to), ...addresses(source.cc)])].filter(

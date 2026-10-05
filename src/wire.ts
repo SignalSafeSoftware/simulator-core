@@ -9,15 +9,7 @@ import {
     type TreeSpecWire,
 } from '@signalsafe/tree-spec';
 import { TreeSpecRuntimeError } from './errors.js';
-import { expectRuntimeObject } from './guards.js';
-
-const ObjectWithHasOwn = Object as ObjectConstructor & {
-    hasOwn(target: object, property: PropertyKey): boolean;
-};
-
-function hasOwn(target: object, property: PropertyKey): boolean {
-    return ObjectWithHasOwn.hasOwn(target, property);
-}
+import { expectRuntimeObject, hasOwn } from './guards.js';
 
 function expectStartNode(raw: Record<string, unknown>): string {
     if (typeof raw.start_node !== 'string' || raw.start_node.trim() === '') {
@@ -38,6 +30,17 @@ function expectNodes(raw: Record<string, unknown>): Record<string, TreeSpecNodeW
         }
     }
     return raw.nodes as Record<string, TreeSpecNodeWire>;
+}
+
+function idText(value: unknown): string {
+    if (typeof value === 'string') return value;
+    return typeof value === 'number' || typeof value === 'boolean' ? String(value) : '';
+}
+
+function describeValue(value: unknown): string {
+    return typeof value === 'string' || typeof value === 'number'
+        ? String(value)
+        : JSON.stringify(value);
 }
 
 function expectTransitions(raw: Record<string, unknown>): TreeSpecTransitionWire[] {
@@ -65,7 +68,7 @@ function expectTransitions(raw: Record<string, unknown>): TreeSpecTransitionWire
         return {
             ...value,
             from: [String(value.from[0] ?? ''), String(value.from[1] ?? '')],
-            to: String(value.to ?? ''),
+            to: idText(value.to),
             ...(outcome === undefined ? {} : { outcome }),
         };
     });
@@ -144,7 +147,7 @@ export function parseTreeSpecRuntime(raw: unknown): TreeSpecWire {
     const version = runtime.wire_version;
     if (version !== undefined && version !== TREESPEC_WIRE_VERSION) {
         throw new TreeSpecRuntimeError(
-            `Unsupported wire_version ${String(version)}; only ${TREESPEC_WIRE_VERSION} is supported.`,
+            `Unsupported wire_version ${describeValue(version)}; only ${TREESPEC_WIRE_VERSION} is supported.`,
         );
     }
     const startNode = expectStartNode(runtime);

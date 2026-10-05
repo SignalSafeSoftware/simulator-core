@@ -301,6 +301,11 @@ describe('tree spec runtime guards', () => {
         expect(() => parseTreeSpecRuntime({ ...base, wire_version: 99 })).toThrow(
             'Unsupported wire_version',
         );
+        expect(() => parseTreeSpecRuntime({ ...base, wire_version: { v: 1 } })).toThrow(
+            'Unsupported wire_version {"v":1}',
+        );
+        expect(parse([{ from: ['a', 'go'], to: 5 }])).toThrow('unknown target node');
+        expect(parse([{ from: ['a', 'go'], to: {} }])).toThrow('unknown target node');
     });
 
     it('reads choices and finds transitions', () => {
