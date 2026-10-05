@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Export `ReplyKind` (`reply`, `reply-all`, `forward`) from `apps/mail` and type `replyMail` with it.
+- Replace repeated string literals with constants; no behavior change.
+
 ## 0.5.0 — October 4, 2026
 
 Remove legacy conversion, wire and presentation aliases; migrate consumers to canonical contracts. See MIGRATION.md.
