@@ -36,20 +36,24 @@ export function newMail(identity: string): Mail {
         updatedAt: now,
     };
 }
-function replyRecipients(source: Mail, own: string, kind: 'reply' | 'reply-all' | 'forward') {
-    if (kind === 'forward') return [];
+/** How a reply draft relates to its source message. */
+export const ReplyKind = Object.freeze({
+    Reply: 'reply',
+    ReplyAll: 'reply-all',
+    Forward: 'forward',
+} as const);
+export type ReplyKind = (typeof ReplyKind)[keyof typeof ReplyKind];
+
+function replyRecipients(source: Mail, own: string, kind: ReplyKind) {
+    if (kind === ReplyKind.Forward) return [];
     const origin = addresses(source.from).includes(own) ? source.to : source.from;
     return addresses(origin).filter((value) => value !== own);
 }
-export function replyMail(
-    source: Mail,
-    identity: string,
-    kind: 'reply' | 'reply-all' | 'forward',
-): Mail {
+export function replyMail(source: Mail, identity: string, kind: ReplyKind): Mail {
     const own = identity.toLowerCase();
     const to = replyRecipients(source, own, kind);
     const cc =
-        kind === 'reply-all'
+        kind === ReplyKind.ReplyAll
             ? [...new Set([...addresses(source.to), ...addresses(source.cc)])].filter(
                   (value) => value !== own && !to.includes(value),
               )
@@ -57,12 +61,12 @@ export function replyMail(
     return {
         ...newMail(identity),
         sourceRecordId: source.sourceRecordId,
-        threadId: kind === 'forward' ? createSimulatorId() : source.threadId,
+        threadId: kind === ReplyKind.Forward ? createSimulatorId() : source.threadId,
         to: to.join(', '),
         cc: cc.join(', '),
-        subject: `${kind === 'forward' ? 'Fwd' : 'Re'}: ${source.subject.replace(/^(Re|Fwd):\s*/i, '')}`,
+        subject: `${kind === ReplyKind.Forward ? 'Fwd' : 'Re'}: ${source.subject.replace(/^(Re|Fwd):\s*/i, '')}`,
         body: `\n\n--- ${source.from} ---\n${source.body}`,
-        attachments: kind === 'forward' ? source.attachments : [],
+        attachments: kind === ReplyKind.Forward ? source.attachments : [],
     };
 }
 

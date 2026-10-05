@@ -10,8 +10,13 @@ export function migrateSimulatorInput(input) {
     const changes = [];
     function move(object, oldKey, newKey, path) {
         if (!Object.hasOwn(object, oldKey)) return;
-        if (object[newKey] != null && JSON.stringify(object[newKey]) !== JSON.stringify(object[oldKey])) {
-            throw new Error(`Conflicting fields at ${path}: ${oldKey} and ${newKey}; review manually.`);
+        if (
+            object[newKey] != null &&
+            JSON.stringify(object[newKey]) !== JSON.stringify(object[oldKey])
+        ) {
+            throw new Error(
+                `Conflicting fields at ${path}: ${oldKey} and ${newKey}; review manually.`,
+            );
         }
         object[newKey] ??= object[oldKey];
         delete object[oldKey];
@@ -23,7 +28,11 @@ export function migrateSimulatorInput(input) {
             return;
         }
         if (!record(node)) return;
-        if (typeof node.start_node === 'string' && record(node.nodes) && Array.isArray(node.transitions)) {
+        if (
+            typeof node.start_node === 'string' &&
+            record(node.nodes) &&
+            Array.isArray(node.transitions)
+        ) {
             for (const [id, entry] of Object.entries(node.nodes)) {
                 if (record(entry)) move(entry, 'options', 'choices', `${path}.nodes.${id}`);
             }
@@ -42,7 +51,9 @@ export function migrateSimulatorInput(input) {
                 node.phone.voicemail ??= {};
                 const current = node.phone.voicemail.transcript;
                 if (current != null && current !== node.phone.voicemail_transcript) {
-                    throw new Error(`Conflicting voicemail transcripts at ${path}.phone; review manually.`);
+                    throw new Error(
+                        `Conflicting voicemail transcripts at ${path}.phone; review manually.`,
+                    );
                 }
                 node.phone.voicemail.transcript ??= node.phone.voicemail_transcript;
                 delete node.phone.voicemail_transcript;
@@ -52,33 +63,59 @@ export function migrateSimulatorInput(input) {
                 for (const [i, page] of node.internet.pages.entries()) {
                     if (!record(page) || !Array.isArray(page.buttons)) continue;
                     for (const [j, button] of page.buttons.entries()) {
-                        if (record(button)) move(button, 'targetPageId', 'target_page_id', `${path}.internet.pages[${i}].buttons[${j}]`);
+                        if (record(button))
+                            move(
+                                button,
+                                'targetPageId',
+                                'target_page_id',
+                                `${path}.internet.pages[${i}].buttons[${j}]`,
+                            );
                     }
                 }
             }
         }
         // Session snapshots have camelCase identity and view-model fields.
-        if (Object.hasOwn(node, 'templateId') && record(node.phone) && Array.isArray(node.phone.callHistory)) {
+        if (
+            Object.hasOwn(node, 'templateId') &&
+            record(node.phone) &&
+            Array.isArray(node.phone.callHistory)
+        ) {
             for (const [i, row] of node.phone.callHistory.entries()) {
                 if (!record(row)) continue;
                 if (row.kind == null) {
                     const label = typeof row.label === 'string' ? row.label.toLowerCase() : '';
-                    row.kind = label.includes('missed') ? 'missed' : label.includes('voicemail') ? 'voicemail' : label.includes('out') ? 'outgoing' : label.includes('in') ? 'incoming' : 'unknown';
+                    row.kind = label.includes('missed')
+                        ? 'missed'
+                        : label.includes('voicemail')
+                          ? 'voicemail'
+                          : label.includes('out')
+                            ? 'outgoing'
+                            : label.includes('in')
+                              ? 'incoming'
+                              : 'unknown';
                     changes.push(`${path}.phone.callHistory[${i}].kind`);
                 }
                 if (Object.hasOwn(row, 'duration')) {
-                    const raw = typeof row.duration === 'string' ? row.duration.trim() : row.duration;
+                    const raw =
+                        typeof row.duration === 'string' ? row.duration.trim() : row.duration;
                     let seconds = null;
                     if (raw != null && raw !== '') {
                         if (typeof raw !== 'string' || !/^\d+:[0-5]\d$/.test(raw)) {
-                            throw new Error(`Unrecognized duration at ${path}.phone.callHistory[${i}]; review manually.`);
+                            throw new Error(
+                                `Unrecognized duration at ${path}.phone.callHistory[${i}]; review manually.`,
+                            );
                         }
                         const [minutes, remainder] = raw.split(':').map(Number);
                         seconds = minutes * 60 + remainder;
-                        if (!Number.isSafeInteger(seconds)) throw new Error(`Duration is too large at ${path}.phone.callHistory[${i}].`);
+                        if (!Number.isSafeInteger(seconds))
+                            throw new Error(
+                                `Duration is too large at ${path}.phone.callHistory[${i}].`,
+                            );
                     }
                     if (row.durationSeconds != null && row.durationSeconds !== seconds) {
-                        throw new Error(`Conflicting durations at ${path}.phone.callHistory[${i}]; review manually.`);
+                        throw new Error(
+                            `Conflicting durations at ${path}.phone.callHistory[${i}]; review manually.`,
+                        );
                     }
                     row.durationSeconds ??= seconds;
                     delete row.duration;
@@ -99,9 +136,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         process.exitCode = 2;
     } else {
         try {
-            const { value, changes } = migrateSimulatorInput(JSON.parse(readFileSync(source, 'utf8')));
-            if (destination) writeFileSync(destination, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
-            console.log(`${changes.length} migration(s)${destination ? `; wrote ${destination}` : '; input unchanged'}.`);
+            const { value, changes } = migrateSimulatorInput(
+                JSON.parse(readFileSync(source, 'utf8')),
+            );
+            if (destination)
+                writeFileSync(destination, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+            console.log(
+                `${changes.length} migration(s)${destination ? `; wrote ${destination}` : '; input unchanged'}.`,
+            );
             for (const change of changes) console.log(change);
             if (!destination && changes.length) process.exitCode = 1;
         } catch (error) {
