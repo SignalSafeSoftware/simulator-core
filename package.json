@@ -2,7 +2,7 @@
   "name": "@signalsafe/simulator-core",
   "version": "0.5.0",
   "type": "module",
-  "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
+  "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes — no UI or transport.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -153,12 +153,12 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
+    "@types/node": "22.17.0",
     "@vitest/coverage-v8": "^5.0.1",
     "oxfmt": "0.71.0",
     "oxlint": "1.86.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.1",
-    "@types/node": "22.17.0"
+    "vitest": "^5.0.1"
   }
 }
