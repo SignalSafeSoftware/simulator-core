@@ -18,12 +18,18 @@ export type MicroFeedback = {
     red_flags?: string[];
 };
 
+/** One selectable choice on a node. */
+export type NodeChoice = { id: string; label: string };
+
+/** One traversed step in a session. */
+export type SessionHistoryEntry = { nodeId: string; choiceId: string };
+
 /** Node shape aligned with training API `node` objects. */
 export type NodeView = {
     id: string;
     type: string;
     prompt: string;
-    choices: Array<{ id: string; label: string }>;
+    choices: NodeChoice[];
     render_hints: Record<string, unknown>;
 };
 
@@ -32,13 +38,13 @@ export type TreeSpecSessionState = {
     spec: TreeSpecWire;
     currentNodeId: string;
     cumulativeScore: ScoreDelta;
-    history: Array<{ nodeId: string; choiceId: string }>;
+    history: SessionHistoryEntry[];
 };
 
 /** Versioned, graph-only session snapshot. Derived state is intentionally omitted. */
 export type TreeSpecSessionSnapshot = {
     readonly version: 1;
-    readonly history: readonly { nodeId: string; choiceId: string }[];
+    readonly history: readonly SessionHistoryEntry[];
 };
 
 export type DispatchContinue = {

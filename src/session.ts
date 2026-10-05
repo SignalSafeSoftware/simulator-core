@@ -8,6 +8,7 @@ import type {
     DispatchContinue,
     DispatchEnded,
     DispatchResult,
+    SessionHistoryEntry,
     TreeSpecSessionSnapshot,
     TreeSpecSessionState,
 } from './types.js';
@@ -129,7 +130,7 @@ function parseSessionSnapshot(raw: unknown): TreeSpecSessionSnapshot {
     if (!Array.isArray(record.history)) {
         throw new TreeSpecRuntimeError('TreeSpec session snapshot history must be an array.');
     }
-    const history: Array<{ nodeId: string; choiceId: string }> = [];
+    const history: SessionHistoryEntry[] = [];
     for (const entry of record.history) {
         if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) {
             throw new TreeSpecRuntimeError('TreeSpec session history entries must be objects.');

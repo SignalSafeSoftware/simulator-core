@@ -10,6 +10,7 @@ import {
 } from '@signalsafe/tree-spec';
 import { TreeSpecRuntimeError } from './errors.js';
 import { expectRuntimeObject, hasOwn } from './guards.js';
+import type { NodeChoice } from './types.js';
 
 function expectStartNode(raw: Record<string, unknown>): string {
     if (typeof raw.start_node !== 'string' || raw.start_node.trim() === '') {
@@ -136,7 +137,7 @@ function validateTransitionTarget(
 }
 
 /** Read choices from the canonical wire format. */
-export function getWireChoices(node: TreeSpecNodeWire): Array<{ id: string; label: string }> {
+export function getWireChoices(node: TreeSpecNodeWire): NodeChoice[] {
     const raw = node.choices ?? [];
     return raw.map((c) => ({ id: String(c.id), label: String(c.label) }));
 }

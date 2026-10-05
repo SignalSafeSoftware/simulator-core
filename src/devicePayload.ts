@@ -64,6 +64,12 @@ export interface SimulatorEmailMessageRow {
     unread?: boolean;
 }
 
+export interface SimulatorPayloadEmailLink {
+    href: string;
+    text: string;
+    title?: string;
+}
+
 export interface SimulatorEmailMessageDetail {
     id: string;
     subject: string;
@@ -78,7 +84,7 @@ export interface SimulatorEmailMessageDetail {
     body: string;
     reply_to?: string;
     return_path?: string;
-    links?: Array<{ href: string; text: string; title?: string }>;
+    links?: SimulatorPayloadEmailLink[];
     attachment_name?: string;
     attachment_type?: string;
     attachment_behavior?: string;
@@ -172,14 +178,16 @@ export interface SimulatorPhoneIncomingCall {
     avatar_url?: string;
 }
 
+export interface SimulatorPayloadCallEntry {
+    id: string;
+    number?: string;
+    name?: string;
+    direction?: 'in' | 'out' | 'missed' | 'voicemail';
+    timestamp?: string;
+}
+
 export interface SimulatorPhoneApp {
-    history?: Array<{
-        id: string;
-        number?: string;
-        name?: string;
-        direction?: 'in' | 'out' | 'missed' | 'voicemail';
-        timestamp?: string;
-    }>;
+    history?: SimulatorPayloadCallEntry[];
     contacts?: string[];
     dial?: {
         digits?: string;
@@ -192,15 +200,31 @@ export interface SimulatorPhoneApp {
     };
 }
 
+export interface SimulatorPayloadHomeWidget {
+    id: string;
+    type?: string;
+    label?: string;
+}
+
+export interface SimulatorPayloadFeaturedApp {
+    id: string;
+    name: string;
+}
+
+export interface SimulatorPayloadSettingsSection {
+    id: string;
+    title: string;
+}
+
 export interface SimulatorHomeApp {
     home?: {
-        widgets?: Array<{ id: string; type?: string; label?: string }>;
+        widgets?: SimulatorPayloadHomeWidget[];
     };
     store?: {
-        featured_apps?: Array<{ id: string; name: string }>;
+        featured_apps?: SimulatorPayloadFeaturedApp[];
     };
     settings?: {
-        sections?: Array<{ id: string; title: string }>;
+        sections?: SimulatorPayloadSettingsSection[];
     };
 }
 
