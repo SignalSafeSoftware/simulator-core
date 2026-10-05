@@ -17,7 +17,15 @@
     "prefer-const": "error",
     "typescript/no-explicit-any": "error",
     "typescript/ban-ts-comment": "error",
-    "react/rules-of-hooks": "error"
+    "react/rules-of-hooks": "error",
+    "max-lines": [
+      "error",
+      {
+        "max": 300,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ]
   },
   "overrides": [
     {
@@ -25,7 +33,15 @@
         "tests/**"
       ],
       "rules": {
-        "react/no-children-prop": "off"
+        "react/no-children-prop": "off",
+        "max-lines": [
+          "error",
+          {
+            "max": 600,
+            "skipBlankLines": true,
+            "skipComments": true
+          }
+        ]
       }
     }
   ]
