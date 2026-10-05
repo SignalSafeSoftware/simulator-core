@@ -41,6 +41,12 @@ jobs:
             - name: Formatting
               run: yarn format:check
 
+            - name: Import cycles
+              run: yarn check:cycles
+
+            - name: Duplicated code
+              run: yarn check:duplication
+
             - name: Typecheck
               run: yarn typecheck
 
