@@ -1,12 +1,8 @@
 import { isRecord, TERMINAL_OUTCOME, type TerminalOutcome } from '@signalsafe/tree-spec';
 import { TreeSpecRuntimeError } from './errors.js';
 
-const ObjectWithHasOwn = Object as ObjectConstructor & {
-    hasOwn(target: object, property: PropertyKey): boolean;
-};
-
 export function hasOwn(target: object, property: PropertyKey): boolean {
-    return ObjectWithHasOwn.hasOwn(target, property);
+    return Object.hasOwn(target, property);
 }
 
 /** Runtime wire root must be a non-null plain object (not an array). */

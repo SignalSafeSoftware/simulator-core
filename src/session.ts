@@ -1,4 +1,9 @@
-import { END_NODE_ID, type TreeSpecIssue, type TreeSpecWire } from '@signalsafe/tree-spec';
+import {
+    END_NODE_ID,
+    isRecord,
+    type TreeSpecIssue,
+    type TreeSpecWire,
+} from '@signalsafe/tree-spec';
 import { TreeSpecRuntimeError } from './errors.js';
 import { emptyScoreDelta, mergeScoreDelta } from './delta.js';
 import { expectTerminalOutcome } from './guards.js';
@@ -120,10 +125,10 @@ export function serializeTreeSpecSession(state: TreeSpecSessionState): TreeSpecS
 }
 
 function parseSessionSnapshot(raw: unknown): TreeSpecSessionSnapshot {
-    if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) {
+    if (!isRecord(raw)) {
         throw new TreeSpecRuntimeError('TreeSpec session snapshot must be an object.');
     }
-    const record = raw as Record<string, unknown>;
+    const record = raw;
     if (record.version !== 1) {
         throw new TreeSpecRuntimeError('Unsupported TreeSpec session snapshot version.');
     }
@@ -132,10 +137,10 @@ function parseSessionSnapshot(raw: unknown): TreeSpecSessionSnapshot {
     }
     const history: SessionHistoryEntry[] = [];
     for (const entry of record.history) {
-        if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) {
+        if (!isRecord(entry)) {
             throw new TreeSpecRuntimeError('TreeSpec session history entries must be objects.');
         }
-        const item = entry as Record<string, unknown>;
+        const item = entry;
         if (
             typeof item.nodeId !== 'string' ||
             item.nodeId.trim() === '' ||

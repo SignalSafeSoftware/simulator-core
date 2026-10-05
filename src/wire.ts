@@ -30,6 +30,7 @@ function expectNodes(raw: Record<string, unknown>): Record<string, TreeSpecNodeW
             );
         }
     }
+    // Node structure is validated by lintTreeSpecWire in parseTreeSpecRuntime.
     return raw.nodes as Record<string, TreeSpecNodeWire>;
 }
 
