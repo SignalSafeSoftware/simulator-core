@@ -45,7 +45,7 @@ describe('canonical simulator app IDs', () => {
             device: { main_menu_items: [{ id: 'custom-label', label: 'Mail', app: 'sms' }] },
         };
         expect(isSimulatorDevicePayload(payload)).toBe(false);
-        payload.device.main_menu_items[0].app = SimulatorApp.Email;
+        payload.device.main_menu_items[0]!.app = SimulatorApp.Email;
         expect(isSimulatorDevicePayload(payload)).toBe(true);
         expect(JSON.parse(JSON.stringify(payload)).entry_point.app).toBe('home');
     });
