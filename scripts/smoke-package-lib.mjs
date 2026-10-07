@@ -366,7 +366,10 @@ function runExampleChecks(root, consumerDir, examples) {
     const sourceDir = path.join(consumerDir, 'examples');
     fs.mkdirSync(sourceDir);
     for (const example of examples) {
-        fs.copyFileSync(path.join(root, 'examples', example), path.join(sourceDir, example));
+        fs.copyFileSync(
+            path.join(root, 'docs', 'examples', example),
+            path.join(sourceDir, example),
+        );
     }
     const configPath = path.join(consumerDir, 'tsconfig.examples.json');
     fs.writeFileSync(

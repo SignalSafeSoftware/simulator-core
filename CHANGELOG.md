@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0 — October 7, 2026
+
+- Add optional `duration_seconds` to `SimulatorPayloadCallEntry`; device JSON validation accepts a nonnegative whole number of seconds and rejects other values. Hosts that omit it are unaffected.
+- Move `MIGRATION.md`, `RELEASING.md` and `STANDALONE.md` into `docs/` and the examples into `docs/examples/`. The docs ship in the package; the examples do not.
+
 ## 0.6.0 — October 4, 2026
 
 - Export `ReplyKind` (`reply`, `reply-all`, `forward`) from `apps/mail` and type `replyMail` with it.

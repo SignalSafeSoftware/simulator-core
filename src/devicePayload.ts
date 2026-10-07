@@ -184,6 +184,8 @@ export interface SimulatorPayloadCallEntry {
     name?: string;
     direction?: 'in' | 'out' | 'missed' | 'voicemail';
     timestamp?: string;
+    /** Whole elapsed seconds; omit when the duration is unknown. */
+    duration_seconds?: number;
 }
 
 export interface SimulatorPhoneApp {

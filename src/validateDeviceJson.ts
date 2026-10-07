@@ -17,6 +17,10 @@ const boolean: Rule = (v, p) => {
 const number: Rule = (v, p) => {
     if (typeof v !== 'number' || !Number.isFinite(v)) fail(p, 'a finite number');
 };
+const durationSeconds: Rule = (v, p) => {
+    if (typeof v !== 'number' || !Number.isSafeInteger(v) || v < 0)
+        fail(p, 'a nonnegative integer duration in seconds');
+};
 const oneOf =
     (...values: readonly string[]): Rule =>
     (v, p) => {
@@ -124,6 +128,7 @@ const schema = object(
                         name: text,
                         direction: oneOf('in', 'out', 'missed', 'voicemail'),
                         timestamp: text,
+                        duration_seconds: durationSeconds,
                     },
                     ['id'],
                 ),

@@ -35,3 +35,22 @@ it('rejects invalid applications, missing screens and malformed nested payloads'
     ])
         expect(isSimulatorDevicePayload(payload)).toBe(false);
 });
+
+it.each([
+    [undefined, true],
+    [0, true],
+    [184, true],
+    [-1, false],
+    [1.5, false],
+    [NaN, false],
+    [Infinity, false],
+    ['184', false],
+    [null, false],
+])('validates optional call duration %s', (duration, valid) => {
+    expect(
+        isSimulatorDevicePayload({
+            entry_point: { app: 'phone', screen: 'history' },
+            phone: { history: [{ id: 'call', duration_seconds: duration }] },
+        }),
+    ).toBe(valid);
+});

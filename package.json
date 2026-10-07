@@ -1,6 +1,6 @@
 {
   "name": "@signalsafe/simulator-core",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes — no UI or transport.",
   "license": "MIT",
@@ -120,8 +120,8 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "RELEASING.md",
-    "MIGRATION.md"
+    "docs",
+    "!docs/examples"
   ],
   "engines": {
     "node": ">=19.0.0"
@@ -140,8 +140,8 @@
     "prepare": "npm run build",
     "test": "vitest run",
     "test:coverage": "yarn test --coverage",
-    "format": "oxfmt src tests examples scripts vitest.config.ts",
-    "format:check": "oxfmt --check src tests examples scripts vitest.config.ts",
+    "format": "oxfmt src tests docs/examples scripts vitest.config.ts",
+    "format:check": "oxfmt --check src tests docs/examples scripts vitest.config.ts",
     "check:artifacts": "node scripts/check-package-artifacts.mjs",
     "check:release": "node scripts/check-package-artifacts.mjs --release",
     "check:modules": "node scripts/check-module-boundaries.mjs",

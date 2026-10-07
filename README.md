@@ -319,8 +319,8 @@ Session state tracks:
 
 ## Example Files
 
-- `examples/basic-terminal-session.ts`: minimal terminal flow with an outcome and score delta
-- `examples/branching-feedback-session.ts`: multi-step flow with validation, intermediate feedback, render hints, and terminal feedback
+- `docs/examples/basic-terminal-session.ts`: minimal terminal flow with an outcome and score delta
+- `docs/examples/branching-feedback-session.ts`: multi-step flow with validation, intermediate feedback, render hints, and terminal feedback
 
 Examples are documentation-focused TypeScript files. They illustrate package usage, but they are not part of the published runtime bundle.
 
@@ -344,7 +344,7 @@ See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted cont
 ## Changelog and releases
 
 - [CHANGELOG.md](./CHANGELOG.md)
-- [RELEASING.md](./RELEASING.md)
+- [RELEASING.md](docs/RELEASING.md)
 
 ## Release 0.3.2
 
@@ -363,7 +363,7 @@ with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
 - Add Zod 4 as a runtime dependency. Existing simulator records retain storage version 1; no data rewrite is required.
 
 This version is prepared locally; it is not a claim of registry publication. See
-[RELEASING.md](RELEASING.md) for the coordinated release order. PhoneMe validates
+[RELEASING.md](docs/RELEASING.md) for the coordinated release order. PhoneMe validates
 normal packed artifacts; installed package files are never patched.
 
 ### Example verification
@@ -371,7 +371,7 @@ normal packed artifacts; installed package files are never patched.
 `npm run smoke:package` compiles and executes the repository examples in an
 isolated consumer against the packed public API. The examples do not resolve
 sibling source trees or private source imports. The shared React 18 local-app
-workflow is in [simulator-device/examples/local-apps](https://github.com/SignalSafeSoftware/simulator-device/tree/main/examples/local-apps).
+workflow is in [simulator-device/docs/examples/local-apps](https://github.com/SignalSafeSoftware/simulator-device/tree/main/docs/examples/local-apps).
 
 ### Shared app identifiers
 

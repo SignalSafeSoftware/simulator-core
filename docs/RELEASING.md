@@ -39,7 +39,7 @@ install. Never invent integrity values or substitute sibling paths in release
 manifests. Run the registry smoke/runtime matrix and Sonar gates as documented
 above before publication; local tarball validation is not registry evidence.
 
-The `simulator-device/examples/local-apps` example builds under React 18 and has
+The `simulator-device/docs/examples/local-apps` example builds under React 18 and has
 a browser workflow (`npm run test:browser`). Before publication, copy it to an
 isolated temporary directory and install all four packed artifacts explicitly.
 Its memory adapter intentionally resets on reload; durable storage, imports,
