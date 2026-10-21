@@ -37,6 +37,20 @@ describe('portable local-app contracts', () => {
                 .latitude,
         ).toBe(0);
     });
+    it('rejects an oversized backup collection before inspecting its records', () => {
+        let recordReads = 0;
+        const secrets = Array.from({ length: 1001 }, () => ({
+            get id() {
+                recordReads += 1;
+                return '';
+            },
+        }));
+        const result = simulatorStoreSchema.safeParse({ ...emptySimulatorStore(), secrets });
+        expect(result.success).toBe(false);
+        expect(recordReads).toBe(0);
+        expect(result.error?.issues).toHaveLength(1);
+        expect(result.error?.issues[0]).toMatchObject({ code: 'too_big', path: ['secrets'] });
+    });
     it('sends locally under the draft identity and excludes self/BCC from reply-all', async () => {
         const draft = {
             ...newMail('self@example.test'),
