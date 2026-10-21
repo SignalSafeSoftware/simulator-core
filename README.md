@@ -1,5 +1,31 @@
 # `@signalsafe/simulator-core`
 
+## Coordinated release candidate (pending publication approval)
+
+| Package | Prepared version | Required simulator dependencies |
+| --- | --- | --- |
+| `@signalsafe/simulator-core` | `0.7.1` | none |
+| `@signalsafe/simulator-theme-bootstrap` | `0.13.1` | none |
+| `@signalsafe/simulator-react` | `0.21.1` | core `0.7.1`; optional default theme `^0.13.1` |
+| `@signalsafe/simulator-device` | `0.21.1` | core `0.7.1`, React `0.21.1`, theme `0.13.1` (exact) |
+
+These compatible patches preserve the existing public runtime API and shared UI.
+React and the default theme must be adopted together: the corrected frame markup
+requires the matching CSS. A custom theme remains an explicit host responsibility.
+The optional theme peer does not install or require the default theme for unstyled
+integrations. Node runtime support remains `>=19.0.0`; build tools use Node 22/24.
+
+Publish core and theme first, then React, then device, only after explicit approval
+and successful gated tag workflows. Download and verify each upstream registry
+artifact before refreshing downstream Yarn locks and the device demo npm lock.
+Future registry integrity values must never be fabricated. Before upstream
+publication, coherent packed-artifact installs provide candidate evidence only;
+frozen standalone registry installs remain a separate release gate.
+
+Existing local host archives retain their recorded provenance until the approved
+registry artifacts pass all host checks. Historical release notes below describe
+their original checkpoints and do not authorize publication or host replacement.
+
 Headless **TreeSpec session runtime**: step scenarios, accumulate scores, resolve outcomes — no UI, React, routing, or transport.
 
 | | |
@@ -346,7 +372,7 @@ See [SECURITY.md](./SECURITY.md). Scenario payloads are **authoring/trusted cont
 - [CHANGELOG.md](./CHANGELOG.md)
 - [RELEASING.md](docs/RELEASING.md)
 
-## Release 0.3.2
+## Historical release 0.3.2
 
 Device contacts support `phone_numbers` and `email_addresses` containing `SimulatorContactValue` (`label`, original `value`, optional canonical `number`). Email details also preserve `bcc`. The runtime requires Node >=19.0.0 and TreeSpec ^0.4.1. See the changelog for the complete release record.
 
@@ -356,7 +382,7 @@ The runtime requirement is Node >=19.0.0. Build, unit-test and coverage tools us
 Node 22/24 (use Node 24.16+ locally). A separate CI job installs packed artifacts
 with strict engine checks and tests runtime behavior on Node 19.0.0 and 19–24.
 
-## Local app migration (0.4.1, release candidate)
+## Historical local app migration (0.4.1, release candidate)
 
 - Add versioned local-device schemas, asset limits, record metadata, paged repository and `DeviceStore` host contracts.
 - Add pure simulated mail transitions, recipient handling and strict browser action envelopes. Simulated send preserves draft identity and performs no network request.
@@ -382,4 +408,15 @@ values stay compatible. Use `isSimulatorApp(value)` at untrusted boundaries and
 `Object.values(SimulatorApp)` when enumerating all apps. Do not confuse app IDs with
 channels (`sms`, `browser`, `contacts`), screen names, or contact/input field kinds.
 
-See [AGENTS.md](./AGENTS.md) for module ownership and verification rules. Root imports were removed in the local audit prerelease; use the explicit owner paths shown in the examples.
+See [AGENTS.md](./AGENTS.md) for module ownership and verification rules. Use the explicit declaring-module paths shown in the examples; root imports are not supported. Historical local archive adoption remains recorded by each host.
+
+## Offline device contract export
+
+The executable device rules also own the JSON Schema used by backend contract
+checks. In this owning checkout, install locked dependencies and run `yarn build`,
+then `node scripts/export-device-schema.mjs` or
+`node scripts/export-device-fixtures.mjs`. The latter emits the same 304 public
+validator cases used by DeliveryPlus. These are offline build tools; consumers
+continue importing `validateDeviceJson` from its explicit public subpath. The
+internal rule modules are not new public package exports. Runtime services do
+not launch Node to validate requests.
