@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.7.1] - Unreleased candidate
+## [0.7.1] - Release approved 2026-10-21
 
 Preserves the package-owned executable device JSON rules, offline schema export and 304-case fixture generation used by backend contract drift checks. Includes the bounded Zod validation fix and patched Zod minimum `^4.6.7`; the public validator acceptance and error messages remain compatible.
 

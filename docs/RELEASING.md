@@ -1,6 +1,6 @@
 # Releasing `@signalsafe/simulator-core`
 
-## Coordinated release candidate (pending publication approval)
+## Coordinated release — approved 2026-10-21
 
 | Package | Prepared version | Required simulator dependencies |
 | --- | --- | --- |
