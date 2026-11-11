@@ -2,6 +2,8 @@
 
 ## 0.7.2 — prepared 2026-11-10
 
+- Add repository, live example and related-package links; document the coordinated 100% coverage verification and synthetic editor example.
+
 - Add typed starting-position targets for individual records and Vault folders.
 - Support a unified authored calls collection and offline legacy-call migration; reject mixing canonical and legacy phone collections.
 - Preserve sender numbers, voicemail numbers, unknown mail dates and authored custom mailbox folders.

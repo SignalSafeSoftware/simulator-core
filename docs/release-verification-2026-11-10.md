@@ -1,3 +1,5 @@
+> Follow-up: [November 11 verification and examples](verification-2026-11-11.md) supersedes the earlier package coverage status below.
+
 # Verification of the combined release source
 
 2026-11-10, Node 24.16.0. Source is based on the current fetched GitHub main branch plus local simulator changes, verified in isolated checkouts. The original dirty checkouts were preserved.

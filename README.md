@@ -1,5 +1,7 @@
 # `@signalsafe/simulator-core`
 
+[Repository](https://github.com/SignalSafeSoftware/simulator-core) · [Live shared device example](https://signalsafesoftware.github.io/simulator-device/) · [Package links and examples](docs/links.md)
+
 Prepared source: **0.7.2**. See [current summary](docs/current-state-summary.md), [changelog](CHANGELOG.md) and [coordinated release preparation](docs/release-2026-11-10.md). Publication status and installed host versions are tracked separately.
 
 ## Historical coordinated release — approved 2026-10-21
