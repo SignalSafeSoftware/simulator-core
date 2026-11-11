@@ -86,12 +86,27 @@ export const photoSchema = z.object({
     updatedAt: timestamp,
 });
 export const mailFolderSchema = z.enum(['inbox', 'drafts', 'sent', 'trash']);
+/** System folder identifiers are reserved; other names are authored mailbox folders. */
+export const mailFolderNameSchema = z
+    .string()
+    .trim()
+    .min(1)
+    .transform((value) => {
+        const lower = value.toLowerCase();
+        const canonical = lower === 'draft' ? 'drafts' : lower === 'outbox' ? 'sent' : lower;
+        const system = mailFolderSchema.safeParse(canonical);
+        return system.success ? system.data : value;
+    });
 export const mailSchema = z.object({
     id,
+    /** null means the authored sent date is unknown; omission retains historical store dates. */
+    sentAt: timestamp.nullable().optional(),
     threadId: id,
     sourceRecordId: z.string().nullable().default(null),
-    folder: mailFolderSchema,
-    previousFolder: mailFolderSchema.exclude(['trash']).default(mailFolderSchema.enum.inbox),
+    folder: mailFolderNameSchema,
+    previousFolder: mailFolderNameSchema
+        .refine((value) => value !== mailFolderSchema.enum.trash)
+        .default(mailFolderSchema.enum.inbox),
     from: z.string().max(500),
     to: z.string().max(2000),
     cc: z.string().max(2000),

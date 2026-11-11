@@ -28,10 +28,21 @@ test('migrates exported tree, device and session data without mutating the origi
     const before = structuredClone(input);
     const result = migrateSimulatorInput(input);
     assert.deepEqual(input, before);
-    assert.equal(result.changes.length, 5);
+    assert.equal(result.changes.length, 6);
     assert.equal(result.value.tree.transitions[0].to, 'END');
     assert.deepEqual(result.value.tree.nodes.a.choices, input.tree.nodes.a.options);
-    assert.deepEqual(result.value.simulator.phone, { voicemail: { transcript: 'Keep me' } });
+    assert.deepEqual(result.value.simulator.phone, {
+        calls: [
+            {
+                id: 'voicemail',
+                type: 'voicemail',
+                name: undefined,
+                number: undefined,
+                timestamp: undefined,
+                transcript: 'Keep me',
+            },
+        ],
+    });
     assert.equal(result.value.simulator.internet.pages[0].buttons[0].target_page_id, 'Next');
     assert.equal(result.value.session.phone.callHistory[0].kind, 'missed');
     assert.equal(result.value.session.phone.callHistory[1].kind, 'outgoing');

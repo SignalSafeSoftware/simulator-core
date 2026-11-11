@@ -1,3 +1,4 @@
+import { SimulatorCallType } from '../phoneCalls.js';
 import { SimulatorApp } from '../simulatorApp.js';
 import {
     define,
@@ -11,6 +12,7 @@ import {
     object,
     array,
 } from './deviceJsonRule.js';
+import { entryTarget } from './simulatorEntryTargetRule.js';
 import type { DeviceJsonSchema } from './deviceJsonRule.js';
 
 const app = oneOf(...Object.values(SimulatorApp));
@@ -43,7 +45,7 @@ export const deviceJsonRule = object(
             },
             { const: 1 },
         ),
-        entry_point: object({ app, screen: text }, ['app', 'screen']),
+        entry_point: object({ app, screen: text, target: entryTarget }, ['app', 'screen']),
         device: object({
             main_menu_items: array(object({ id: text, label: text, app }, ['id', 'label']), true),
             secondary_defaults: object(
@@ -83,6 +85,23 @@ export const deviceJsonRule = object(
             true,
         ),
         phone: object({
+            calls: array(
+                object(
+                    {
+                        id: text,
+                        type: oneOf(...Object.values(SimulatorCallType)),
+                        name: text,
+                        number: text,
+                        timestamp: text,
+                        duration_seconds: durationSeconds,
+                        transcript: text,
+                        avatar_url: text,
+                        caller_title: text,
+                    },
+                    ['id', 'type'],
+                ),
+                true,
+            ),
             history: array(
                 object(
                     {
@@ -109,6 +128,7 @@ export const deviceJsonRule = object(
                 }),
             ),
             voicemail: object({
+                phone_number: text,
                 transcript: text,
                 caller_name: text,
                 timestamp: text,
@@ -149,6 +169,7 @@ export const deviceJsonRule = object(
                                 {
                                     id: text,
                                     from: oneOf('them', 'me'),
+                                    sender_number: text,
                                     text,
                                     delay_seconds: number,
                                     timestamp: text,
@@ -232,10 +253,32 @@ export const deviceJsonSchema: DeviceJsonSchema = {
         required: ['phone'],
         properties: {
             phone: {
-                type: 'object',
-                properties: { voicemail_transcript: true },
-                required: ['voicemail_transcript'],
-                additionalProperties: true,
+                anyOf: [
+                    {
+                        type: 'object',
+                        properties: { voicemail_transcript: true },
+                        required: ['voicemail_transcript'],
+                        additionalProperties: true,
+                    },
+                    {
+                        type: 'object',
+                        properties: { calls: true, history: true },
+                        required: ['calls', 'history'],
+                        additionalProperties: true,
+                    },
+                    {
+                        type: 'object',
+                        properties: { calls: true, incoming_call: true },
+                        required: ['calls', 'incoming_call'],
+                        additionalProperties: true,
+                    },
+                    {
+                        type: 'object',
+                        properties: { calls: true, voicemail: true },
+                        required: ['calls', 'voicemail'],
+                        additionalProperties: true,
+                    },
+                ],
             },
         },
     },

@@ -72,6 +72,9 @@ export function replyMail(source: Mail, identity: string, kind: ReplyKind): Mail
 
 /** Draft edits change their order; read state and folder moves do not. */
 export function mailTime(mail: Mail): string {
+    if (mail.sentAt === null) return '';
+    if (mail.sentAt !== undefined && mail.folder !== mailFolderSchema.enum.drafts)
+        return mail.sentAt;
     return mail.folder === mailFolderSchema.enum.drafts ||
         (mail.folder === mailFolderSchema.enum.trash &&
             mail.previousFolder === mailFolderSchema.enum.drafts)
@@ -80,6 +83,8 @@ export function mailTime(mail: Mail): string {
 }
 export function sortMail(mail: readonly Mail[]): Mail[] {
     return [...mail].sort(
-        (a, b) => Date.parse(mailTime(b)) - Date.parse(mailTime(a)) || a.id.localeCompare(b.id),
+        (a, b) =>
+            (Date.parse(mailTime(b)) || 0) - (Date.parse(mailTime(a)) || 0) ||
+            a.id.localeCompare(b.id),
     );
 }

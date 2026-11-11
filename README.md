@@ -1,6 +1,10 @@
 # `@signalsafe/simulator-core`
 
-## Coordinated release — approved 2026-10-21
+[Repository](https://github.com/SignalSafeSoftware/simulator-core) · [Live shared device example](https://signalsafesoftware.github.io/simulator-device/) · [Package links and examples](docs/links.md)
+
+Prepared source: **0.7.2**. See [current summary](docs/current-state-summary.md), [changelog](CHANGELOG.md) and [coordinated release preparation](docs/release-2026-11-10.md). Publication status and installed host versions are tracked separately.
+
+## Historical coordinated release — approved 2026-10-21
 
 | Package | Prepared version | Required simulator dependencies |
 | --- | --- | --- |
@@ -25,6 +29,8 @@ frozen standalone registry installs remain a separate release gate.
 Existing local host archives retain their recorded provenance until the approved
 registry artifacts pass all host checks. Historical release notes below describe
 their original checkpoints and do not authorize publication or host replacement.
+
+Current source and planned customer-subdomain impact: [current-state summary](docs/current-state-summary.md).
 
 Headless **TreeSpec session runtime**: step scenarios, accumulate scores, resolve outcomes — no UI, React, routing, or transport.
 

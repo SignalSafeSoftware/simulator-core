@@ -17,6 +17,7 @@ function sentMail(draft: Mail): Mail {
         to: addresses(draft.to).join(', '),
         cc: addresses(draft.cc).join(', '),
         bcc: addresses(draft.bcc).join(', '),
+        ...(draft.sentAt !== undefined ? { sentAt } : {}),
         createdAt: sentAt,
         updatedAt: sentAt,
     });

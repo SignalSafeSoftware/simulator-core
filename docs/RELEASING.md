@@ -1,6 +1,8 @@
 # Releasing `@signalsafe/simulator-core`
 
-## Coordinated release — approved 2026-10-21
+Current prepared version: **0.7.2**. Follow [the November 10 release plan](release-2026-11-10.md). Earlier approvals below are historical. No new publication is authorized by this source update.
+
+## Historical coordinated release — approved 2026-10-21
 
 | Package | Prepared version | Required simulator dependencies |
 | --- | --- | --- |
