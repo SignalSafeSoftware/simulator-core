@@ -17,7 +17,7 @@ Prepared source: **simulator-core 0.7.2**. The version is not yet published to n
 - [Shared device example](https://signalsafesoftware.github.io/simulator-device/).
 - [All related packages and source examples](links.md).
 
-The editor example carries exact local review archives and a SHA-256 manifest. Its independent lockfile installs those archives rather than pretending unpublished versions are available from npm. Browser regressions cover conversation selection/preview, contact editing, Reset, JSON validation, source links and download.
+The editor example carries exact local review archives and a SHA-256 manifest. Its independent lockfile installs those archives rather than pretending unpublished versions are available from npm. Four browser regressions cover the package-owned phone frame, shared theme/icon font, conversation selection/preview, contact editing, Reset, JSON validation, source links and download.
 
 ## Remaining release boundary
 
