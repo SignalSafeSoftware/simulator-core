@@ -1,5 +1,8 @@
 # Releasing `@signalsafe/simulator-core`
 
+Current status (November 11): Published npm version **0.7.2**, released through the fully gated GitHub tag workflow on November 11, 2026. Public references use core 0.7.2, React 0.21.2, device 0.21.4 and theme 0.13.4. Historical preparation/approval sections below are retained as history.
+
+
 Current prepared version: **0.7.2**. Follow [the November 10 release plan](release-2026-11-10.md). Earlier approvals below are historical. No new publication is authorized by this source update.
 
 ## Historical coordinated release — approved 2026-10-21

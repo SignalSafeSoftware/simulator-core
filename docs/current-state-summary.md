@@ -1,24 +1,27 @@
-# simulator-core current-state summary
+# Current state
 
-Prepared source version: **0.7.2** (updated 2026-11-11). This is not a claim of npm publication.
+Published npm version **0.7.2**, released through the fully gated GitHub tag workflow on November 11, 2026.
 
-- Add typed starting-position targets for individual records and Vault folders.
-- Support a unified authored calls collection and offline legacy-call migration; reject mixing canonical and legacy phone collections.
-- Preserve sender numbers, voicemail numbers, unknown mail dates and authored custom mailbox folders.
-- Retain the merged executable JSON rule, bounded-validation and schema/fixture export changes.
+## Coordinated public references
 
-## Coordinated versions
-
-| Package | Prepared version |
+| Package | Registry version |
 | --- | --- |
-| `@signalsafe/simulator-core` | `0.7.2` |
-| `@signalsafe/simulator-react` | `0.21.2` |
-| `@signalsafe/simulator-device` | `0.21.3` |
-| `@signalsafe/simulator-theme-bootstrap` | `0.13.3` |
-| `@signalsafe/simulator-editor-react` | `0.1.0` |
+| Core | 0.7.2 |
+| React | 0.21.2 |
+| Device | 0.21.4 |
+| Theme | 0.13.4 |
 
-The source includes the current GitHub main branch plus the reviewed local simulator work. Existing merged release fixes are preserved. Source manifests and packaged declarations use the coordinated version set. See [release preparation](release-2026-11-10.md) for dependency and verification status.
+Package manifests and examples select these public registry versions. The private editor example keeps only the editor itself as a checked archive. Historical candidate reports remain in the release/verification documents; they describe prior states, not current dependency requirements.
 
-## Current verification and examples
+## Verification
 
-165 package tests pass; all four executable-source coverage metrics are 100%. See [November 11 verification](verification-2026-11-11.md) for the coordinated 1,465-test result, public examples and remaining registry-release gates.
+165 executable-source tests pass with 100% statements, branches, functions and lines. Strict types, lint, formatting, build and packed-consumer checks pass where applicable. Theme additionally passes real Chromium layout checks. The device example passes 16 browser tests and the private editor example passes 4.
+
+Device 0.21.3 was blocked by a stale local Yarn lock resolution; its tag was retained. Device 0.21.4 was verified from a fresh checkout and empty cache, and its release guard rejects file/link lock resolutions. Theme 0.13.4 preserves the existing scrollbar patch without reverting newer shared layout fixes.
+
+## Links
+
+- [Repository](https://github.com/SignalSafeSoftware/simulator-core)
+- [Editor example](https://signalsafesoftware.github.io/simulator-editor-react/)
+- [Device example](https://signalsafesoftware.github.io/simulator-device/)
+- [Related packages](links.md)
