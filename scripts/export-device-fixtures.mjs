@@ -15,9 +15,13 @@ function sample(schema) {
     return 'fixture';
 }
 const base = sample(deviceJsonSchema);
+const callsBase = structuredClone(base);
+delete base.phone.calls;
+for (const key of ['history', 'incoming_call', 'voicemail']) delete callsBase.phone[key];
 const cases = [];
 function append(name, path, operation, value) {
-    let input = structuredClone(base);
+    const phoneFormat = path[0] === 'phone' && path[1] === 'calls' ? 'calls' : 'legacy';
+    let input = structuredClone(phoneFormat === 'calls' ? callsBase : base);
     if (path.length === 0) input = value;
     else {
         const parent = path.slice(0, -1).reduce((current, key) => current[key], input);
@@ -30,7 +34,7 @@ function append(name, path, operation, value) {
     } catch {
         accepted = false;
     }
-    cases.push({ name, path, operation, value, accepted });
+    cases.push({ name, path, operation, value, accepted, phone_format: phoneFormat });
 }
 function visit(schema, path) {
     if (schema.anyOf) {
@@ -81,4 +85,8 @@ function visit(schema, path) {
 }
 visit(deviceJsonSchema, []);
 append('removed-voicemail-field', ['phone', 'voicemail_transcript'], 'set', 'old reader');
-process.stdout.write(JSON.stringify({ base, cases }, null, 2) + '\n');
+append('mixed-phone-collections', [], 'set', {
+    ...callsBase,
+    phone: { ...callsBase.phone, history: [] },
+});
+process.stdout.write(JSON.stringify({ base, calls_base: callsBase, cases }, null, 2) + '\n');

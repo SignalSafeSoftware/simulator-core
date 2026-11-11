@@ -1,3 +1,4 @@
+import type { SimulatorCallRecord } from './phoneCalls.js';
 /**
  * Canonical full-device simulator payload (`simulator_json` / `detail.simulator`).
  * Framework-agnostic; consumed by simulator-react adapters and simulator-device UI.
@@ -5,11 +6,18 @@
 
 import type { SimulatorApp } from './simulatorApp.js';
 
+/** A stable authored record to open on the starting screen. */
+export type SimulatorEntryTarget =
+    | { kind: 'conversation' | 'email' | 'contact' | 'call' | 'photo' | 'vault-entry'; id: string }
+    | { kind: 'vault-folder'; folder: string | null };
+
 /** Where the scenario starts: which app and which screen within it. */
 export interface SimulatorEntryPoint {
     app: SimulatorApp;
     /** App-specific screen id; for internet see {@link SimulatorInternetScreenId}. */
     screen: string;
+    /** Optional record selection; screen-only documents remain supported. */
+    target?: SimulatorEntryTarget;
 }
 
 /** One item on the device main (bottom) menu. */
@@ -105,6 +113,8 @@ export interface SmsThreadMessage {
     /** Stable host identity for history reconciliation; optional for authored scenario messages. */
     id?: string;
     from: 'them' | 'me';
+    /** Authored sender selected from the conversation's contact numbers. */
+    sender_number?: string;
     text: string;
     delay_seconds?: number;
     timestamp?: string;
@@ -189,6 +199,7 @@ export interface SimulatorPayloadCallEntry {
 }
 
 export interface SimulatorPhoneApp {
+    calls?: SimulatorCallRecord[];
     history?: SimulatorPayloadCallEntry[];
     contacts?: string[];
     dial?: {
@@ -196,6 +207,7 @@ export interface SimulatorPhoneApp {
     };
     incoming_call?: SimulatorPhoneIncomingCall | null;
     voicemail?: {
+        phone_number?: string;
         transcript?: string;
         caller_name?: string;
         timestamp?: string;

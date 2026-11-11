@@ -1,3 +1,4 @@
+import { migratePhoneCalls } from '../dist/phoneCalls.js';
 /** Offline, non-destructive migration. Never loaded by the simulator runtime. */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -58,6 +59,15 @@ export function migrateSimulatorInput(input) {
                 node.phone.voicemail.transcript ??= node.phone.voicemail_transcript;
                 delete node.phone.voicemail_transcript;
                 changes.push(`${path}.phone.voicemail_transcript -> voicemail.transcript`);
+            }
+            if (
+                record(node.phone) &&
+                ['history', 'incoming_call', 'voicemail'].some((key) =>
+                    Object.hasOwn(node.phone, key),
+                )
+            ) {
+                node.phone = migratePhoneCalls(node.phone);
+                changes.push(`${path}.phone -> phone.calls`);
             }
             if (record(node.internet) && Array.isArray(node.internet.pages)) {
                 for (const [i, page] of node.internet.pages.entries()) {

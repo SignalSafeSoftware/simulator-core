@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.2 — prepared 2026-11-10
+
+- Add typed starting-position targets for individual records and Vault folders.
+- Support a unified authored calls collection and offline legacy-call migration; reject mixing canonical and legacy phone collections.
+- Preserve sender numbers, voicemail numbers, unknown mail dates and authored custom mailbox folders.
+- Retain the merged executable JSON rule, bounded-validation and schema/fixture export changes.
+
+Prepared source version; npm publication and downstream registry-lock refresh are separate steps.
+
 ## [0.7.1] - Release approved 2026-10-21
 
 Preserves the package-owned executable device JSON rules, offline schema export and 304-case fixture generation used by backend contract drift checks. Includes the bounded Zod validation fix and patched Zod minimum `^4.6.7`; the public validator acceptance and error messages remain compatible.

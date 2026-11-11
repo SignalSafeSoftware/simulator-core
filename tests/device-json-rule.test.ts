@@ -58,10 +58,32 @@ describe('one device rule declaration for runtime and offline schema', () => {
             required: ['phone'],
             properties: {
                 phone: {
-                    type: 'object',
-                    properties: { voicemail_transcript: true },
-                    required: ['voicemail_transcript'],
-                    additionalProperties: true,
+                    anyOf: [
+                        {
+                            type: 'object',
+                            properties: { voicemail_transcript: true },
+                            required: ['voicemail_transcript'],
+                            additionalProperties: true,
+                        },
+                        {
+                            type: 'object',
+                            properties: { calls: true, history: true },
+                            required: ['calls', 'history'],
+                            additionalProperties: true,
+                        },
+                        {
+                            type: 'object',
+                            properties: { calls: true, incoming_call: true },
+                            required: ['calls', 'incoming_call'],
+                            additionalProperties: true,
+                        },
+                        {
+                            type: 'object',
+                            properties: { calls: true, voicemail: true },
+                            required: ['calls', 'voicemail'],
+                            additionalProperties: true,
+                        },
+                    ],
                 },
             },
         });

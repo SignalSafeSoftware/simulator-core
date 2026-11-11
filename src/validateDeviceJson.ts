@@ -12,5 +12,16 @@ export function validateDeviceJson(value: unknown): asserts value is SimulatorDe
             'Removed simulator field phone.voicemail_transcript; migrate it to phone.voicemail.transcript.',
         );
     }
+
+    const phone = record(value) ? value.phone : undefined;
+    if (
+        record(phone) &&
+        hasOwn(phone, 'calls') &&
+        ['history', 'incoming_call', 'voicemail'].some((key) => hasOwn(phone, key))
+    ) {
+        throw new Error(
+            'Phone calls cannot be combined with legacy phone collections. Migrate them first.',
+        );
+    }
     deviceJsonRule(value, '$');
 }

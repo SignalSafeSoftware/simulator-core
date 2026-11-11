@@ -1,6 +1,6 @@
 {
   "name": "@signalsafe/simulator-core",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
   "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
   "license": "MIT",
@@ -113,7 +113,12 @@
       "import": "./dist/wire.js",
       "default": "./dist/wire.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./phoneCalls": {
+      "types": "./dist/phoneCalls.d.ts",
+      "import": "./dist/phoneCalls.js",
+      "default": "./dist/phoneCalls.js"
+    }
   },
   "files": [
     "dist",

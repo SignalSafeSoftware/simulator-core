@@ -1,3 +1,4 @@
+import { validateDeviceJson } from '../src/validateDeviceJson.js';
 import { describe, expect, it } from 'vitest';
 import { hasDeviceEntryPoint, isSimulatorDevicePayload } from '../src/devicePayloadGuards.js';
 import type { SimulatorDevicePayload } from '../src/devicePayload.js';
@@ -53,4 +54,43 @@ it.each([
             phone: { history: [{ id: 'call', duration_seconds: duration }] },
         }),
     ).toBe(valid);
+});
+
+it.each([
+    ['111', true],
+    ['', true],
+    [undefined, true],
+    [123, false],
+    [null, false],
+    [['111'], false],
+])('validates a single optional SMS sender number %s', (sender_number, valid) => {
+    expect(
+        isSimulatorDevicePayload({
+            entry_point: { app: 'messages', screen: 'thread_detail' },
+            messages: {
+                thread_detail: {
+                    messages: [
+                        {
+                            from: 'them',
+                            text: 'Hello',
+                            ...(sender_number === undefined ? {} : { sender_number }),
+                        },
+                    ],
+                },
+            },
+        }),
+    ).toBe(valid);
+});
+
+it('validates an optional voicemail phone number without accepting non-text values', () => {
+    const payload: SimulatorDevicePayload = {
+        entry_point: { app: 'phone', screen: 'voicemail' },
+        phone: {
+            voicemail: { caller_name: 'Bank', phone_number: '+12025550123', transcript: 'Hello' },
+        },
+    };
+    expect(() => validateDeviceJson(payload)).not.toThrow();
+    expect(() =>
+        validateDeviceJson({ ...payload, phone: { voicemail: { phone_number: 123 } } }),
+    ).toThrow();
 });

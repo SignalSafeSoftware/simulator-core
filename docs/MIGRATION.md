@@ -18,3 +18,7 @@ Migrate exported persisted data before loading it through the new packages. Prod
 ## Supported APIs retained
 
 Editable `value` and immutable `datasource` inputs have different update/reset semantics. `onSimulatorEvent` carries interaction telemetry; `onNavigation` controls navigation and `onNavigationEvent` observes it. Numeric IDs and optional authored SMS message IDs are valid inputs. None of these is a forwarding alias or a deprecated screen implementation.
+
+## Unified authored phone calls (local review)
+
+New authored data uses `phone.calls` and `SimulatorCallType` from the declaring `phoneCalls` module. `migratePhoneCalls` explicitly converts legacy history/incoming-call/voicemail collections, preserving IDs, metadata and unknown outcomes. Do not combine both formats in one phone object. The offline input migration performs the same conversion. Runtime adapters retain legacy-read support for immutable records; this does not permit new Calls data to claim an older device-contract fingerprint. See the [host integration guide](../../../DeliveryPlus/docs/quality/simulator-ui/unified-calls.md).
