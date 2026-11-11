@@ -8,6 +8,13 @@ it('preserves an explicit unknown date, retains existing mail dates, and dates a
     expect(mailTime(unknown)).toBe('');
     expect(mailTime(normal)).toBe(normal.createdAt);
     expect(sortMail([unknown, normal]).map((mail) => mail.id)).toEqual([normal.id, unknown.id]);
+    expect(sortMail([normal, unknown]).map((mail) => mail.id)).toEqual([normal.id, unknown.id]);
+    expect(
+        sortMail([
+            { ...unknown, id: 'z' },
+            { ...unknown, id: 'a' },
+        ]).map((mail) => mail.id),
+    ).toEqual(['a', 'z']);
     const sent = await localEmailService.send({ ...unknown, to: 'recipient@example.test' });
     expect(sent.sentAt).toBe(sent.createdAt);
     expect(mailTime(sent)).not.toBe('');
