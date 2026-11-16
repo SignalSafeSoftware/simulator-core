@@ -1,6 +1,12 @@
 # Current state
 
-## Unpublished follow-up — 2026-11-15
+## Published registry release — 0.7.3 (2026-11-15)
+
+The immutable `v0.7.3` [tag workflow](https://github.com/SignalSafeSoftware/simulator-core/actions/runs/43796516672) passed all required checks and publication. The actual public npm archive was downloaded and its SHA-512 integrity verified; its 78 packed files match the reviewed candidate exactly. Archive SHA-256: `28f060b59ee572293fb809df9f9703020b2f195ef752c83eafd99737c0f9be55`. Release commit: `4be17c5cba295b02abd1c7599db3edb11e26c742`.
+
+The combined source passes 170 tests with 100% executable-source coverage, strict types, lint/module checks, formatting, build, cycle/duplication checks and packed consumers. All five reviewed dependency PRs were merged only after trusted current-head CI passed.
+
+## Historical local review — 2026-11-15
 
 Preserve full email record content and metadata in device payload rows. Reject oversized backup collections before reading records, and do not inspect duplicate identities after record validation fails.
 
