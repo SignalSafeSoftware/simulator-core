@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.3 — prepared 2026-11-15 (not published)
+
+- Reconcile reviewed registry updates for Node declarations, lint, formatting, duplication checks and Vite.
+- Preserve complete device-email content and metadata in validated payload records.
+- Reject oversized backup collections before inspecting records and avoid duplicate-identity reads after record validation fails.
+- Retain the public storage and executable device JSON contract; no saved-data migration is required.
+
+Prepared release candidate only. Existing local review evidence remains historical; publication requires explicit approval and the gated version-tag workflow.
+
+## Unreleased — local review 2026-11-15
+
+- Preserve full email record content and metadata in device payload rows. Reject oversized backup collections before reading records, and do not inspect duplicate identities after record validation fails.
+- Verified as unpublished review artifact `0.7.3-mail-ui.0`. Registry version `0.7.2` and release authorization are separate from this checkpoint.
+
+
 ## 0.7.2 — prepared 2026-11-10
 
 - Add repository, live example and related-package links; document the coordinated 100% coverage verification and synthetic editor example.

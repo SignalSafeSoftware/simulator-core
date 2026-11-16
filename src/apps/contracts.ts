@@ -128,10 +128,10 @@ export const simulatorStoreSchema = z
     .object({
         version: z.literal(SIMULATOR_STORAGE_VERSION),
         revision: z.number().int().nonnegative(),
-        secrets: z.array(secretSchema).max(1000),
+        secrets: z.array(z.unknown()).max(1000).pipe(z.array(secretSchema)),
         vaultFolders: z.array(label).max(1000).default([DEFAULT_VAULT_FOLDER]),
-        photos: z.array(photoSchema).max(500),
-        mail: z.array(mailSchema).max(10000),
+        photos: z.array(z.unknown()).max(500).pipe(z.array(photoSchema)),
+        mail: z.array(z.unknown()).max(10000).pipe(z.array(mailSchema)),
         identity: z.email(),
         lock: lockSchema,
     })
@@ -140,7 +140,10 @@ export const simulatorStoreSchema = z
             [value.secrets, value.photos, value.mail].every(
                 (records) => new Set(records.map((record) => record.id)).size === records.length,
             ),
-        'Duplicate record IDs are not allowed.',
+        {
+            message: 'Duplicate record IDs are not allowed.',
+            when: ({ issues }) => issues.length === 0,
+        },
     );
 export type SimulatorStore = z.infer<typeof simulatorStoreSchema>;
 export type Secret = z.infer<typeof secretSchema>;

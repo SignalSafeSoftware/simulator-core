@@ -37,20 +37,43 @@ describe('portable local-app contracts', () => {
                 .latitude,
         ).toBe(0);
     });
-    it('rejects an oversized backup collection before inspecting its records', () => {
-        let recordReads = 0;
-        const secrets = Array.from({ length: 1001 }, () => ({
-            get id() {
-                recordReads += 1;
-                return '';
-            },
-        }));
-        const result = simulatorStoreSchema.safeParse({ ...emptySimulatorStore(), secrets });
-        expect(result.success).toBe(false);
-        expect(recordReads).toBe(0);
-        expect(result.error?.issues).toHaveLength(1);
-        expect(result.error?.issues[0]).toMatchObject({ code: 'too_big', path: ['secrets'] });
-    });
+    it.each([
+        { collection: 'secrets', length: 1001 },
+        { collection: 'photos', length: 501 },
+        { collection: 'mail', length: 10001 },
+    ] as const)(
+        'rejects oversized $collection before inspecting records',
+        ({ collection, length }) => {
+            let recordReads = 0;
+            const records = Array.from({ length }, () => ({
+                get id() {
+                    recordReads += 1;
+                    return '';
+                },
+            }));
+            const result = simulatorStoreSchema.safeParse({
+                ...emptySimulatorStore(),
+                [collection]: records,
+            });
+            expect(result.success).toBe(false);
+            expect(recordReads).toBe(0);
+            expect(result.error?.issues).toHaveLength(1);
+            expect(result.error?.issues[0]).toMatchObject({ code: 'too_big', path: [collection] });
+        },
+    );
+    it.each(['secrets', 'photos', 'mail'] as const)(
+        'reports malformed %s records without running unsafe duplicate checks',
+        (collection) => {
+            const result = simulatorStoreSchema.safeParse({
+                ...emptySimulatorStore(),
+                [collection]: [null],
+            });
+            expect(result.success).toBe(false);
+            expect(result.error?.issues).toEqual([
+                expect.objectContaining({ code: 'invalid_type', path: [collection, 0] }),
+            ]);
+        },
+    );
     it('sends locally under the draft identity and excludes self/BCC from reply-all', async () => {
         const draft = {
             ...newMail('self@example.test'),

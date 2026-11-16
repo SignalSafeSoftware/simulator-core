@@ -60,16 +60,10 @@ export interface SimulatorDirectoryEntry {
     description?: string | null;
 }
 
-export interface SimulatorEmailMessageRow {
-    id: string;
+export interface SimulatorEmailMessageRow extends Omit<SimulatorEmailMessageDetail, 'body'> {
     folder_id: string;
-    subject: string;
-    from: string;
-    from_addr?: string;
-    from_display_name?: string;
-    snippet?: string;
-    date_at?: string;
-    unread?: boolean;
+    /** Full message body; summary-only messages may provide a snippet instead. */
+    body?: string;
 }
 
 export interface SimulatorPayloadEmailLink {
