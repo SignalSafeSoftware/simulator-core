@@ -34,14 +34,38 @@ it.each([
     ).toThrow('entry_point.target');
 });
 
-it('preserves non-whitespace record identifiers in the exported starting-target schema', () => {
-    expect(entryTarget.jsonSchema).toMatchObject({
-        anyOf: expect.arrayContaining([
-            expect.objectContaining({
-                properties: expect.objectContaining({
-                    id: { type: 'string', minLength: 1, pattern: /\S/.source },
-                }),
-            }),
-        ]),
-    });
+it('keeps exported starting-target patterns and runtime record-id validation equivalent', () => {
+    const targets = entryTarget.jsonSchema.anyOf;
+    if (!Array.isArray(targets)) throw new Error('Starting-target schemas must be listed.');
+    const first: unknown = targets[0];
+    if (!first || typeof first !== 'object' || !('properties' in first)) {
+        throw new Error('A record target must declare its properties.');
+    }
+    const properties = first.properties;
+    if (!properties || typeof properties !== 'object' || !('id' in properties)) {
+        throw new Error('A record target must declare its identifier.');
+    }
+    const idSchema = properties.id;
+    if (!idSchema || typeof idSchema !== 'object' || !('pattern' in idSchema)) {
+        throw new Error('A record identifier must declare its pattern.');
+    }
+    const pattern = idSchema.pattern;
+    if (typeof pattern !== 'string') throw new Error('The identifier pattern must be a string.');
+    const expression = new RegExp(pattern);
+    for (const [id, accepted] of [
+        ['record-1', true],
+        ['  padded-id  ', true],
+        [String.raw`\S`, true],
+        ['', false],
+        ['   ', false],
+        ['\n\t', false],
+    ] as const) {
+        expect(expression.test(id)).toBe(accepted);
+        const validate = () =>
+            validateDeviceJson({
+                entry_point: { app: 'phone', screen: 'history', target: { kind: 'call', id } },
+            });
+        if (accepted) expect(validate).not.toThrow();
+        else expect(validate).toThrow('entry_point.target');
+    }
 });
