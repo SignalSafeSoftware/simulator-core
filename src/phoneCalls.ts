@@ -1,4 +1,4 @@
-import type { SimulatorPhoneApp } from './devicePayload.js';
+import type { SimulatorPayloadCallEntry, SimulatorPhoneApp } from './devicePayload.js';
 
 export const SimulatorCallType = Object.freeze({
     Incoming: 'incoming',
@@ -25,6 +25,20 @@ export interface SimulatorCallRecord {
     avatar_url?: string;
     caller_title?: string;
 }
+function historyCallType(
+    direction: SimulatorPayloadCallEntry['direction'],
+    durationSeconds: SimulatorPayloadCallEntry['duration_seconds'],
+): SimulatorCallType {
+    if (direction === 'out') {
+        return durationSeconds && durationSeconds > 0
+            ? SimulatorCallType.Accepted
+            : SimulatorCallType.Outgoing;
+    }
+    if (direction === 'missed') return SimulatorCallType.Missed;
+    if (direction === 'voicemail') return SimulatorCallType.Voicemail;
+    return SimulatorCallType.Received;
+}
+
 /** Explicit, loss-preserving conversion of the previous three authored collections. */
 export function unifyPhoneCalls(phone: SimulatorPhoneApp): SimulatorCallRecord[] {
     if (phone.calls) {
@@ -35,24 +49,18 @@ export function unifyPhoneCalls(phone: SimulatorPhoneApp): SimulatorCallRecord[]
         }
         return phone.calls;
     }
-    const calls: SimulatorCallRecord[] = (phone.history ?? []).map(({ direction, ...entry }) => ({
-        ...entry,
-        id: entry.id,
-        type:
-            direction === 'out'
-                ? entry.duration_seconds && entry.duration_seconds > 0
-                    ? SimulatorCallType.Accepted
-                    : SimulatorCallType.Outgoing
-                : direction === 'missed'
-                  ? SimulatorCallType.Missed
-                  : direction === 'voicemail'
-                    ? SimulatorCallType.Voicemail
-                    : SimulatorCallType.Received,
-        name: entry.name,
-        number: entry.number,
-        timestamp: entry.timestamp,
-        duration_seconds: entry.duration_seconds,
-    }));
+    const calls: SimulatorCallRecord[] = (phone.history ?? []).map((source) => {
+        const { direction, ...entry } = source;
+        return {
+            ...entry,
+            id: entry.id,
+            type: historyCallType(direction, entry.duration_seconds),
+            name: entry.name,
+            number: entry.number,
+            timestamp: entry.timestamp,
+            duration_seconds: entry.duration_seconds,
+        };
+    });
     const uniqueId = (base: string) => {
         let id = base;
         let suffix = 1;
