@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+import { entryTarget } from '../src/internal/simulatorEntryTargetRule.js';
 import { validateDeviceJson } from '../src/validateDeviceJson.js';
 it.each([
     undefined,
@@ -31,4 +32,16 @@ it.each([
     expect(() =>
         validateDeviceJson({ entry_point: { app: 'home', screen: 'home', target } }),
     ).toThrow('entry_point.target');
+});
+
+it('preserves non-whitespace record identifiers in the exported starting-target schema', () => {
+    expect(entryTarget.jsonSchema).toMatchObject({
+        anyOf: expect.arrayContaining([
+            expect.objectContaining({
+                properties: expect.objectContaining({
+                    id: { type: 'string', minLength: 1, pattern: /\S/.source },
+                }),
+            }),
+        ]),
+    });
 });

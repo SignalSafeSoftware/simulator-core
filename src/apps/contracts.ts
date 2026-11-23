@@ -93,7 +93,9 @@ export const mailFolderNameSchema = z
     .min(1)
     .transform((value) => {
         const lower = value.toLowerCase();
-        const canonical = lower === 'draft' ? 'drafts' : lower === 'outbox' ? 'sent' : lower;
+        let canonical = lower;
+        if (lower === 'draft') canonical = 'drafts';
+        else if (lower === 'outbox') canonical = 'sent';
         const system = mailFolderSchema.safeParse(canonical);
         return system.success ? system.data : value;
     });

@@ -3,7 +3,7 @@ const entryId = define(
     (value, path) => {
         if (typeof value !== 'string' || !value.trim()) fail(path, 'a nonempty record id');
     },
-    { type: 'string', minLength: 1, pattern: '\\S' },
+    { type: 'string', minLength: 1, pattern: String.raw`\S` },
 );
 const entryTargets: Readonly<Record<string, Rule>> = Object.fromEntries(
     ['conversation', 'email', 'contact', 'call', 'photo', 'vault-entry'].map((kind) => [
