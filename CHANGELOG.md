@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.4 — 2026-11-23
+
+- Publish npm releases through GitHub Actions OIDC trusted publishing.
+- Document the designated publisher, validation and token retirement process.
+
 ## 0.7.3 — prepared 2026-11-15 (not published)
 
 - Reconcile reviewed registry updates for Node declarations, lint, formatting, duplication checks and Vite.
@@ -13,7 +18,6 @@ Prepared release candidate only. Existing local review evidence remains historic
 
 - Preserve full email record content and metadata in device payload rows. Reject oversized backup collections before reading records, and do not inspect duplicate identities after record validation fails.
 - Verified as unpublished review artifact `0.7.3-mail-ui.0`. Registry version `0.7.2` and release authorization are separate from this checkpoint.
-
 
 ## 0.7.2 — prepared 2026-11-10
 
