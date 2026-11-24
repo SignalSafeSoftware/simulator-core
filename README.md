@@ -1,10 +1,15 @@
 # `@signalsafe/simulator-core`
 
+[![Build](https://github.com/SignalSafeSoftware/simulator-core/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/SignalSafeSoftware/simulator-core/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@signalsafe/simulator-core?logo=npm)](https://www.npmjs.com/package/@signalsafe/simulator-core)
+[![npm downloads per month](https://img.shields.io/npm/dm/@signalsafe/simulator-core?label=downloads%2Fmonth)](https://www.npmjs.com/package/@signalsafe/simulator-core)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/SignalSafeSoftware/simulator-core/blob/main/LICENSE)
+
 [Repository](https://github.com/SignalSafeSoftware/simulator-core) · [Live shared device example](https://signalsafesoftware.github.io/simulator-device/) · [Package links and examples](docs/links.md)
 
 Source, registry releases and unpublished review artifacts are tracked separately. See [current summary](docs/current-state-summary.md), [changelog](CHANGELOG.md) and [coordinated release preparation](docs/release-2026-11-10.md). Publication status and installed host versions are tracked separately.
 
-Current npm release: **0.7.3**. See the [verified November 15 registry receipt](docs/current-state-summary.md) and [changelog](CHANGELOG.md). Earlier local review artifacts remain historical provenance.
+Historical npm release checkpoint: **0.7.3**. See the [verified November 15 registry receipt](docs/current-state-summary.md) and [changelog](CHANGELOG.md). Earlier local review artifacts remain historical provenance.
 
 ## Historical coordinated release — approved 2026-10-21
 
