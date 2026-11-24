@@ -1,4 +1,20 @@
-# Current state
+# Current npm release: @signalsafe/simulator-core 0.7.4
+
+The trusted-publishing migration prepares patch `0.7.4` under immutable
+GitHub tag `v0.7.4`. Current release and authentication instructions are in
+[RELEASING.md](../RELEASING.md); the migration uses GitHub Actions OIDC rather than
+a permanent npm publishing token. Runtime exports and dependency ranges are
+unchanged by this patch. Host adoption and Python releases remain independent.
+
+The release workflow is the source of publication evidence. This documentation
+follow-up does not reseal or republish an immutable package archive or move a tag.
+
+## Historical release and state record
+
+The previous snapshot below is retained for context; its version and publication
+status statements apply to that earlier snapshot.
+
+### Current state
 
 ## Published registry release — 0.7.3 (2026-11-15)
 
@@ -26,17 +42,16 @@ The review archives were not rebuilt for these documentation/test-only changes. 
 
 ## Published checkpoint — 2026-11-11
 
-
 Published npm version **0.7.2**, released through the fully gated GitHub tag workflow on November 11, 2026.
 
 ## Coordinated public references
 
 | Package | Registry version |
-| --- | --- |
-| Core | 0.7.2 |
-| React | 0.21.2 |
-| Device | 0.21.4 |
-| Theme | 0.13.4 |
+| ------- | ---------------- |
+| Core    | 0.7.2            |
+| React   | 0.21.2           |
+| Device  | 0.21.4           |
+| Theme   | 0.13.4           |
 
 Package manifests and examples select these public registry versions. The private editor example keeps only the editor itself as a checked archive. Historical candidate reports remain in the release/verification documents; they describe prior states, not current dependency requirements.
 
