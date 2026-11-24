@@ -206,6 +206,9 @@ jobs:
                   node runtime-compatibility.mjs
 
     publish:
+        permissions:
+          contents: read
+          id-token: write
         name: Publish
         needs: [checks, tests, scan, smoke-package, runtime-compatibility]
         if: |
@@ -221,6 +224,8 @@ jobs:
               with:
                   node-version: ${{ env.PUBLISH_NODE_VERSION }}
 
+            - name: Install npm with trusted publishing support
+              run: npm install --global npm@11.21.2 --ignore-scripts
             - name: Enable Yarn
               run: corepack enable
 
@@ -240,14 +245,5 @@ jobs:
                   console.log(pkg.name, pkg.version, process.env.GITHUB_REF);
                   NODE
 
-            - name: Configure npm auth
-              run: |
-                echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-                echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-              env:
-                NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
             - name: Publish to npm
               run: npm publish --access public --ignore-scripts
-              env:
-                NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
