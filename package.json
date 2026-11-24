@@ -1,172 +1,172 @@
 {
-  "name": "@signalsafe/simulator-core",
-  "version": "0.7.3",
-  "type": "module",
-  "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SignalSafeSoftware/simulator-core.git"
-  },
-  "bugs": {
-    "url": "https://github.com/SignalSafeSoftware/simulator-core/issues"
-  },
-  "homepage": "https://signalsafesoftware.github.io/simulator-device/",
-  "keywords": [
-    "tree-spec",
-    "simulator",
-    "decision-tree",
-    "scenario",
-    "training",
-    "phishing",
-    "security-awareness",
-    "typescript",
-    "runtime",
-    "session",
-    "headless",
-    "signalsafe"
-  ],
-  "sideEffects": false,
-  "exports": {
-    "./apps/browserProtocol": {
-      "types": "./dist/apps/browserProtocol.d.ts",
-      "import": "./dist/apps/browserProtocol.js",
-      "default": "./dist/apps/browserProtocol.js"
+    "name": "@signalsafe/simulator-core",
+    "version": "0.7.4",
+    "type": "module",
+    "description": "Headless TreeSpec session runtime: step scenarios, accumulate scores, resolve outcomes \u2014 no UI or transport.",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SignalSafeSoftware/simulator-core.git"
     },
-    "./apps/contracts": {
-      "types": "./dist/apps/contracts.d.ts",
-      "import": "./dist/apps/contracts.js",
-      "default": "./dist/apps/contracts.js"
+    "bugs": {
+        "url": "https://github.com/SignalSafeSoftware/simulator-core/issues"
     },
-    "./apps/deviceData": {
-      "types": "./dist/apps/deviceData.d.ts",
-      "import": "./dist/apps/deviceData.js",
-      "default": "./dist/apps/deviceData.js"
+    "homepage": "https://signalsafesoftware.github.io/simulator-device/",
+    "keywords": [
+        "tree-spec",
+        "simulator",
+        "decision-tree",
+        "scenario",
+        "training",
+        "phishing",
+        "security-awareness",
+        "typescript",
+        "runtime",
+        "session",
+        "headless",
+        "signalsafe"
+    ],
+    "sideEffects": false,
+    "exports": {
+        "./apps/browserProtocol": {
+            "types": "./dist/apps/browserProtocol.d.ts",
+            "import": "./dist/apps/browserProtocol.js",
+            "default": "./dist/apps/browserProtocol.js"
+        },
+        "./apps/contracts": {
+            "types": "./dist/apps/contracts.d.ts",
+            "import": "./dist/apps/contracts.js",
+            "default": "./dist/apps/contracts.js"
+        },
+        "./apps/deviceData": {
+            "types": "./dist/apps/deviceData.d.ts",
+            "import": "./dist/apps/deviceData.js",
+            "default": "./dist/apps/deviceData.js"
+        },
+        "./apps/emailService": {
+            "types": "./dist/apps/emailService.d.ts",
+            "import": "./dist/apps/emailService.js",
+            "default": "./dist/apps/emailService.js"
+        },
+        "./apps/id": {
+            "types": "./dist/apps/id.d.ts",
+            "import": "./dist/apps/id.js",
+            "default": "./dist/apps/id.js"
+        },
+        "./apps/mail": {
+            "types": "./dist/apps/mail.d.ts",
+            "import": "./dist/apps/mail.js",
+            "default": "./dist/apps/mail.js"
+        },
+        "./apps/store": {
+            "types": "./dist/apps/store.d.ts",
+            "import": "./dist/apps/store.js",
+            "default": "./dist/apps/store.js"
+        },
+        "./delta": {
+            "types": "./dist/delta.d.ts",
+            "import": "./dist/delta.js",
+            "default": "./dist/delta.js"
+        },
+        "./devicePayload": {
+            "types": "./dist/devicePayload.d.ts",
+            "import": "./dist/devicePayload.js",
+            "default": "./dist/devicePayload.js"
+        },
+        "./devicePayloadGuards": {
+            "types": "./dist/devicePayloadGuards.d.ts",
+            "import": "./dist/devicePayloadGuards.js",
+            "default": "./dist/devicePayloadGuards.js"
+        },
+        "./errors": {
+            "types": "./dist/errors.d.ts",
+            "import": "./dist/errors.js",
+            "default": "./dist/errors.js"
+        },
+        "./nodeView": {
+            "types": "./dist/nodeView.d.ts",
+            "import": "./dist/nodeView.js",
+            "default": "./dist/nodeView.js"
+        },
+        "./session": {
+            "types": "./dist/session.d.ts",
+            "import": "./dist/session.js",
+            "default": "./dist/session.js"
+        },
+        "./simulatorApp": {
+            "types": "./dist/simulatorApp.d.ts",
+            "import": "./dist/simulatorApp.js",
+            "default": "./dist/simulatorApp.js"
+        },
+        "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js",
+            "default": "./dist/types.js"
+        },
+        "./validateDeviceJson": {
+            "types": "./dist/validateDeviceJson.d.ts",
+            "import": "./dist/validateDeviceJson.js",
+            "default": "./dist/validateDeviceJson.js"
+        },
+        "./wire": {
+            "types": "./dist/wire.d.ts",
+            "import": "./dist/wire.js",
+            "default": "./dist/wire.js"
+        },
+        "./package.json": "./package.json",
+        "./phoneCalls": {
+            "types": "./dist/phoneCalls.d.ts",
+            "import": "./dist/phoneCalls.js",
+            "default": "./dist/phoneCalls.js"
+        }
     },
-    "./apps/emailService": {
-      "types": "./dist/apps/emailService.d.ts",
-      "import": "./dist/apps/emailService.js",
-      "default": "./dist/apps/emailService.js"
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE",
+        "CHANGELOG.md",
+        "docs",
+        "!docs/examples"
+    ],
+    "engines": {
+        "node": ">=19.0.0"
     },
-    "./apps/id": {
-      "types": "./dist/apps/id.d.ts",
-      "import": "./dist/apps/id.js",
-      "default": "./dist/apps/id.js"
+    "packageManager": "yarn@1.22.22",
+    "publishConfig": {
+        "access": "public"
     },
-    "./apps/mail": {
-      "types": "./dist/apps/mail.d.ts",
-      "import": "./dist/apps/mail.js",
-      "default": "./dist/apps/mail.js"
+    "scripts": {
+        "build": "npm run check:artifacts && node scripts/clean-dist.mjs && tsc -p tsconfig.build.json",
+        "lint": "npm run check:modules && oxlint src tests --deny-warnings",
+        "typecheck": "tsc --noEmit && npm run typecheck:tests",
+        "publish:dry-run": "npm publish --dry-run",
+        "smoke:package": "node scripts/smoke-package.mjs",
+        "prepublishOnly": "npm run check:release && npm run build",
+        "prepare": "npm run build",
+        "test": "vitest run",
+        "test:coverage": "yarn test --coverage",
+        "format": "oxfmt src tests docs/examples scripts vitest.config.ts",
+        "format:check": "oxfmt --check src tests docs/examples scripts vitest.config.ts",
+        "check:artifacts": "node scripts/check-package-artifacts.mjs",
+        "check:release": "node scripts/check-package-artifacts.mjs --release",
+        "check:modules": "node scripts/check-module-boundaries.mjs",
+        "typecheck:tests": "tsc --noEmit -p tsconfig.tests.json",
+        "test:migration": "node --test scripts/migrate-input-json.test.mjs",
+        "check:cycles": "npx --yes madge@8.0.0 --circular --extensions ts,tsx --ts-config tsconfig.json src",
+        "check:duplication": "jscpd src --min-lines 8 --min-tokens 70 --threshold 0 --reporters console --silent"
     },
-    "./apps/store": {
-      "types": "./dist/apps/store.d.ts",
-      "import": "./dist/apps/store.js",
-      "default": "./dist/apps/store.js"
+    "dependencies": {
+        "@signalsafe/tree-spec": "^0.4.1",
+        "zod": "^4.6.7"
     },
-    "./delta": {
-      "types": "./dist/delta.d.ts",
-      "import": "./dist/delta.js",
-      "default": "./dist/delta.js"
-    },
-    "./devicePayload": {
-      "types": "./dist/devicePayload.d.ts",
-      "import": "./dist/devicePayload.js",
-      "default": "./dist/devicePayload.js"
-    },
-    "./devicePayloadGuards": {
-      "types": "./dist/devicePayloadGuards.d.ts",
-      "import": "./dist/devicePayloadGuards.js",
-      "default": "./dist/devicePayloadGuards.js"
-    },
-    "./errors": {
-      "types": "./dist/errors.d.ts",
-      "import": "./dist/errors.js",
-      "default": "./dist/errors.js"
-    },
-    "./nodeView": {
-      "types": "./dist/nodeView.d.ts",
-      "import": "./dist/nodeView.js",
-      "default": "./dist/nodeView.js"
-    },
-    "./session": {
-      "types": "./dist/session.d.ts",
-      "import": "./dist/session.js",
-      "default": "./dist/session.js"
-    },
-    "./simulatorApp": {
-      "types": "./dist/simulatorApp.d.ts",
-      "import": "./dist/simulatorApp.js",
-      "default": "./dist/simulatorApp.js"
-    },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "default": "./dist/types.js"
-    },
-    "./validateDeviceJson": {
-      "types": "./dist/validateDeviceJson.d.ts",
-      "import": "./dist/validateDeviceJson.js",
-      "default": "./dist/validateDeviceJson.js"
-    },
-    "./wire": {
-      "types": "./dist/wire.d.ts",
-      "import": "./dist/wire.js",
-      "default": "./dist/wire.js"
-    },
-    "./package.json": "./package.json",
-    "./phoneCalls": {
-      "types": "./dist/phoneCalls.d.ts",
-      "import": "./dist/phoneCalls.js",
-      "default": "./dist/phoneCalls.js"
+    "devDependencies": {
+        "@types/node": "26.6.6",
+        "@vitest/coverage-v8": "^5.0.1",
+        "jscpd": "^5.4.0",
+        "oxfmt": "0.79.0",
+        "oxlint": "1.94.0",
+        "typescript": "^7.0.2",
+        "vite": "^8.3.0",
+        "vitest": "^5.0.1"
     }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md",
-    "docs",
-    "!docs/examples"
-  ],
-  "engines": {
-    "node": ">=19.0.0"
-  },
-  "packageManager": "yarn@1.22.22",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "build": "npm run check:artifacts && node scripts/clean-dist.mjs && tsc -p tsconfig.build.json",
-    "lint": "npm run check:modules && oxlint src tests --deny-warnings",
-    "typecheck": "tsc --noEmit && npm run typecheck:tests",
-    "publish:dry-run": "npm publish --dry-run",
-    "smoke:package": "node scripts/smoke-package.mjs",
-    "prepublishOnly": "npm run check:release && npm run build",
-    "prepare": "npm run build",
-    "test": "vitest run",
-    "test:coverage": "yarn test --coverage",
-    "format": "oxfmt src tests docs/examples scripts vitest.config.ts",
-    "format:check": "oxfmt --check src tests docs/examples scripts vitest.config.ts",
-    "check:artifacts": "node scripts/check-package-artifacts.mjs",
-    "check:release": "node scripts/check-package-artifacts.mjs --release",
-    "check:modules": "node scripts/check-module-boundaries.mjs",
-    "typecheck:tests": "tsc --noEmit -p tsconfig.tests.json",
-    "test:migration": "node --test scripts/migrate-input-json.test.mjs",
-    "check:cycles": "npx --yes madge@8.0.0 --circular --extensions ts,tsx --ts-config tsconfig.json src",
-    "check:duplication": "jscpd src --min-lines 8 --min-tokens 70 --threshold 0 --reporters console --silent"
-  },
-  "dependencies": {
-    "@signalsafe/tree-spec": "^0.4.1",
-    "zod": "^4.6.7"
-  },
-  "devDependencies": {
-    "@types/node": "26.6.6",
-    "@vitest/coverage-v8": "^5.0.1",
-    "jscpd": "^5.4.0",
-    "oxfmt": "0.79.0",
-    "oxlint": "1.94.0",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.0",
-    "vitest": "^5.0.1"
-  }
 }
